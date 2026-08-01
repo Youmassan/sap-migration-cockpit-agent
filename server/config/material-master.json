@@ -1,0 +1,96 @@
+{
+  "id": "material-master",
+  "name": "Material Master",
+  "description": "Basic Data for Material Master records (simplified, inspired by SAP transaction MM01/MM02).",
+  "keyFields": ["MaterialNumber"],
+  "fields": [
+    {
+      "name": "MaterialNumber",
+      "label": "Material Number",
+      "type": "string",
+      "mandatory": true,
+      "maxLength": 18,
+      "format": "^[A-Z0-9-]{4,18}$",
+      "formatDescription": "4-18 uppercase alphanumeric characters or hyphens"
+    },
+    {
+      "name": "Description",
+      "label": "Material Description",
+      "type": "string",
+      "mandatory": true,
+      "maxLength": 40
+    },
+    {
+      "name": "MaterialType",
+      "label": "Material Type",
+      "type": "string",
+      "mandatory": true,
+      "lookup": ["FERT", "ROH", "HALB", "HAWA", "DIEN"]
+    },
+    {
+      "name": "BaseUnit",
+      "label": "Base Unit of Measure",
+      "type": "string",
+      "mandatory": true,
+      "lookup": ["EA", "KG", "L", "M", "PC", "BOX"]
+    },
+    {
+      "name": "Plant",
+      "label": "Plant",
+      "type": "string",
+      "mandatory": true,
+      "maxLength": 4,
+      "lookup": ["1000", "2000", "3000"]
+    },
+    {
+      "name": "GrossWeight",
+      "label": "Gross Weight",
+      "type": "number",
+      "mandatory": false,
+      "min": 0
+    },
+    {
+      "name": "NetWeight",
+      "label": "Net Weight",
+      "type": "number",
+      "mandatory": false,
+      "min": 0
+    },
+    {
+      "name": "WeightUnit",
+      "label": "Weight Unit",
+      "type": "string",
+      "mandatory": false,
+      "lookup": ["KG", "G", "LB"]
+    },
+    {
+      "name": "CreatedOn",
+      "label": "Created On Date",
+      "type": "date",
+      "mandatory": true
+    }
+  ],
+  "crossFieldRules": [
+    {
+      "id": "net-le-gross",
+      "type": "compare",
+      "left": "NetWeight",
+      "operator": "<=",
+      "right": "GrossWeight",
+      "message": "Net Weight must be less than or equal to Gross Weight"
+    },
+    {
+      "id": "weight-unit-required-if-weight",
+      "type": "requiredIf",
+      "if": { "field": "GrossWeight", "present": true },
+      "then": "WeightUnit",
+      "message": "Weight Unit is required when Gross Weight is provided"
+    },
+    {
+      "id": "created-on-not-future",
+      "type": "dateNotFuture",
+      "field": "CreatedOn",
+      "message": "Created On Date cannot be in the future"
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+MaterialNumber,Description,MaterialType,BaseUnit,Plant,GrossWeight,NetWeight,WeightUnit,CreatedOn
+MAT-20001,CSV Import Test Widget,FERT,EA,1000,4.2,3.9,KG,2024-05-01
+MAT-20002,CSV Import Raw Material,ROH,KG,2000,10,9.5,KG,2024-05-02

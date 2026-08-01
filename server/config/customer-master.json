@@ -1,0 +1,77 @@
+{
+  "id": "customer-master",
+  "name": "Customer Master",
+  "description": "General Data / Company Code Data for Customer Master records (simplified, inspired by SAP transaction XD01/FD01).",
+  "keyFields": ["CustomerNumber"],
+  "fields": [
+    {
+      "name": "CustomerNumber",
+      "label": "Customer Number",
+      "type": "string",
+      "mandatory": true,
+      "maxLength": 10,
+      "format": "^[A-Z0-9]{4,10}$",
+      "formatDescription": "4-10 alphanumeric uppercase characters"
+    },
+    {
+      "name": "Name",
+      "label": "Customer Name",
+      "type": "string",
+      "mandatory": true,
+      "maxLength": 35
+    },
+    {
+      "name": "Country",
+      "label": "Country Key",
+      "type": "string",
+      "mandatory": true,
+      "maxLength": 2,
+      "lookup": ["US", "DE", "GB", "FR", "IN", "CN", "JP", "CA", "AU", "BR"]
+    },
+    {
+      "name": "Currency",
+      "label": "Currency Key",
+      "type": "string",
+      "mandatory": true,
+      "maxLength": 3,
+      "lookup": ["USD", "EUR", "GBP", "JPY", "INR", "CAD", "AUD", "BRL", "CNY"]
+    },
+    {
+      "name": "PaymentTerms",
+      "label": "Payment Terms",
+      "type": "string",
+      "mandatory": false,
+      "maxLength": 4,
+      "lookup": ["0001", "0002", "0003", "NT30", "NT60"]
+    },
+    {
+      "name": "Email",
+      "label": "Email Address",
+      "type": "string",
+      "mandatory": false,
+      "format": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+      "formatDescription": "a valid email address"
+    },
+    {
+      "name": "CreditLimit",
+      "label": "Credit Limit",
+      "type": "number",
+      "mandatory": false,
+      "min": 0
+    },
+    {
+      "name": "ValidFrom",
+      "label": "Valid From Date",
+      "type": "date",
+      "mandatory": true
+    }
+  ],
+  "crossFieldRules": [
+    {
+      "id": "valid-from-not-future",
+      "type": "dateNotFuture",
+      "field": "ValidFrom",
+      "message": "Valid From Date cannot be in the future"
+    }
+  ]
+}

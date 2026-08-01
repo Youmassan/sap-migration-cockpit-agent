@@ -1,0 +1,65 @@
+:root {
+  --sap-shell-bg: #354a5f;
+  --sap-shell-text: #ffffff;
+  --sap-brand: #0070f2;
+  --sap-brand-hover: #0058c2;
+  --sap-brand-active: #003e94;
+  --sap-negative: #bb0000;
+  --sap-negative-bg: #ffebeb;
+  --sap-critical: #e9730c;
+  --sap-critical-bg: #fef6f1;
+  --sap-positive: #107e3e;
+  --sap-positive-bg: #f1fdf6;
+  --sap-informative: #0a6ed1;
+
+  --sap-page-bg: #f7f7f7;
+  --sap-tile-bg: #ffffff;
+  --sap-border: #d9d9d9;
+  --sap-text: #32363a;
+  --sap-text-muted: #6a6d70;
+  --sap-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  --sap-font: '72', '72full', 'Segoe UI', Arial, Helvetica, sans-serif;
+
+  font: 14px/1.4 var(--sap-font);
+  color: var(--sap-text);
+  background: var(--sap-page-bg);
+  color-scheme: light;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --sap-page-bg: #1d2228;
+    --sap-tile-bg: #2a2f36;
+    --sap-border: #3d434a;
+    --sap-text: #e8e9ea;
+    --sap-text-muted: #a9adb0;
+    --sap-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.4);
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+h1, h2, h3 {
+  font-family: var(--sap-font);
+  font-weight: 600;
+  color: var(--sap-text);
+  margin: 0 0 8px;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  font-family: var(--sap-font);
+  cursor: pointer;
+}
