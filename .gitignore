@@ -5,3 +5,5 @@ dist-ssr/
 .env
 *.log
 .claude/settings.local.json
+server/test-fixtures/
+client/public/test-samples/

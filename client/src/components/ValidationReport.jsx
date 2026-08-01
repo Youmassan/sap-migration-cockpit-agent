@@ -1,105 +1,147 @@
 import { useMemo, useState } from 'react';
 
+const SECTIONS = [
+  { key: 'prerequisites', title: 'Prerequisites', hint: 'File format, size, and template requirements' },
+  { key: 'migrationObject', title: 'Migration Object Scope', hint: 'Staging Table availability, restrictions, and load behaviour' },
+  { key: 'structure', title: 'Structure Integrity', hint: 'Layer 1 — sheets, columns, hidden technical rows' },
+  { key: 'mandatory', title: 'Mandatory Coverage', hint: 'Layer 2 — active rows must fill all mandatory fields' },
+  { key: 'referential', title: 'Foreign Key / Referential Integrity', hint: 'Layer 2b — child rows must point at a real header' },
+  { key: 'types', title: 'Data Type & Length', hint: 'Layer 3 — conformance with the declared type and length' },
+  { key: 'mapping', title: 'Value Mapping (Convert Values)', hint: 'Layer 4 — source values needing target mapping' },
+  { key: 'checkTables', title: 'Check Tables / Configuration (Simulate)', hint: 'Layer 5 — requires a connected SAP system' },
+];
+
+const SEVERITY_RANK = { Error: 0, Warning: 1, Information: 2, Success: 3 };
+
 export default function ValidationReport({ report }) {
-  const [severityFilter, setSeverityFilter] = useState('all');
-  const { summary, structural, rowIssues, fileName } = report;
+  const [filter, setFilter] = useState('all');
 
-  const filteredIssues = useMemo(() => {
-    if (severityFilter === 'all') return rowIssues;
-    return rowIssues.filter((i) => i.severity === severityFilter);
-  }, [rowIssues, severityFilter]);
+  const { summary } = report;
+  const ready = summary.migrationReady;
 
-  const overallStatus = summary.errorCount === 0 ? 'success' : 'error';
+  const filterMessages = useMemo(() => (messages) => {
+    const sorted = [...messages].sort((a, b) => SEVERITY_RANK[a.severity] - SEVERITY_RANK[b.severity]);
+    if (filter === 'all') return sorted;
+    return sorted.filter((m) => m.severity === filter);
+  }, [filter]);
 
   return (
-    <div className="panel">
-      <div className="panel__header">
-        <h2>Check Results</h2>
-        <p className="panel__description">File: {fileName}</p>
-      </div>
-
-      <div className={`report-banner report-banner--${overallStatus}`}>
-        {overallStatus === 'success'
-          ? 'All rows passed validation.'
-          : `${summary.rowsWithErrors} of ${summary.totalRows} row(s) contain errors that must be fixed before migration.`}
-      </div>
-
-      <div className="stat-grid">
-        <StatTile label="Total Rows" value={summary.totalRows} />
-        <StatTile label="Valid Rows" value={summary.validRows} tone="success" />
-        <StatTile label="Rows with Errors" value={summary.rowsWithErrors} tone="error" />
-        <StatTile label="Errors" value={summary.errorCount} tone="error" />
-        <StatTile label="Warnings" value={summary.warningCount} tone="warning" />
-      </div>
-
-      {(structural.missingMandatoryColumns.length > 0 || structural.unknownColumns.length > 0) && (
-        <div className="panel__section">
-          <h3>Structural Check</h3>
-          {structural.missingMandatoryColumns.length > 0 && (
-            <div className="structural-issue structural-issue--error">
-              Missing mandatory column(s): {structural.missingMandatoryColumns.join(', ')}
-            </div>
-          )}
-          {structural.unknownColumns.length > 0 && (
-            <div className="structural-issue structural-issue--warning">
-              Unrecognized column(s) ignored during check: {structural.unknownColumns.join(', ')}
-            </div>
-          )}
+    <div className="report">
+      <div className="panel">
+        <div className="panel__header">
+          <h2>Validation Report</h2>
         </div>
-      )}
 
-      <div className="panel__section">
-        <div className="section-header-row">
-          <h3>Row-Level Issues</h3>
-          <div className="filter-group">
-            {['all', 'error', 'warning'].map((sev) => (
-              <button
-                key={sev}
-                className={`filter-chip${severityFilter === sev ? ' filter-chip--active' : ''}`}
-                onClick={() => setSeverityFilter(sev)}
-              >
-                {sev === 'all' ? 'All' : sev.charAt(0).toUpperCase() + sev.slice(1)}
-              </button>
+        <dl className="meta-grid">
+          <MetaItem label="Template" value={report.fileName} />
+          <MetaItem label="Migration Object" value={report.objectName || '—'} />
+          <MetaItem label="Saved As" value={report.format} />
+          <MetaItem label="Field List" value={report.fieldListDetected ? 'Detected / intact' : 'Missing'} />
+          <MetaItem label="Main (key) sheet" value={report.mainSheet || '—'} />
+          <MetaItem label="Key field" value={report.keyField || '—'} />
+          <MetaItem label="Records" value={report.recordCount} />
+          <MetaItem label="Sheets" value={report.sheetCount} />
+        </dl>
+
+        <div className={`verdict verdict--${ready ? 'ready' : 'blocked'}`}>
+          <span className="verdict__label">Migration-ready</span>
+          <span className="verdict__value">{ready ? 'YES' : 'NO'}</span>
+          <span className="verdict__detail">
+            {ready
+              ? 'No blocking errors found. The cockpit should accept this template.'
+              : `${summary.errors} blocking error${summary.errors === 1 ? '' : 's'} must be fixed before upload.`}
+          </span>
+        </div>
+
+        <div className="stat-grid">
+          <StatTile label="Errors" value={summary.errors} tone="error" />
+          <StatTile label="Warnings" value={summary.warnings} tone="warning" />
+          <StatTile label="Information" value={summary.information} tone="info" />
+        </div>
+
+        {report.sheetsWithData.length > 0 && (
+          <div className="data-sheets">
+            <span className="data-sheets__label">Sheets containing data:</span>
+            {report.sheetsWithData.map((s) => (
+              <span key={s.name} className="chip">{s.name} <em>{s.rows}</em></span>
             ))}
-          </div>
-        </div>
-
-        {filteredIssues.length === 0 ? (
-          <div className="state-message">No issues to display.</div>
-        ) : (
-          <div className="table-scroll">
-            <table className="issues-table">
-              <thead>
-                <tr>
-                  <th>Row</th>
-                  <th>Field</th>
-                  <th>Severity</th>
-                  <th>Message</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredIssues.map((issue, idx) => (
-                  <tr key={idx}>
-                    <td>{issue.row}</td>
-                    <td>{issue.field}</td>
-                    <td>
-                      <span className={`badge badge--${issue.severity}`}>{issue.severity}</span>
-                    </td>
-                    <td>{issue.message}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
         )}
       </div>
+
+      <div className="filter-bar">
+        {['all', 'Error', 'Warning', 'Information'].map((sev) => (
+          <button
+            key={sev}
+            className={`filter-chip${filter === sev ? ' filter-chip--active' : ''}`}
+            onClick={() => setFilter(sev)}
+          >
+            {sev === 'all' ? 'All messages' : `${sev}s`}
+          </button>
+        ))}
+      </div>
+
+      {SECTIONS.map(({ key, title, hint }) => {
+        const messages = report.sections[key] || [];
+        const visible = filterMessages(messages);
+        const errorCount = messages.filter((m) => m.severity === 'Error').length;
+        const warnCount = messages.filter((m) => m.severity === 'Warning').length;
+
+        const status = errorCount > 0 ? 'fail' : warnCount > 0 ? 'warn' : 'pass';
+
+        return (
+          <div className="panel" key={key}>
+            <div className="section-head">
+              <div>
+                <h3>{title}</h3>
+                <p className="section-hint">{hint}</p>
+              </div>
+              <span className={`status-pill status-pill--${status}`}>
+                {status === 'fail' ? `FAIL · ${errorCount}` : status === 'warn' ? `REVIEW · ${warnCount}` : 'PASS'}
+              </span>
+            </div>
+
+            {visible.length === 0 ? (
+              <p className="state-message">No messages match the current filter.</p>
+            ) : (
+              <ul className="message-list">
+                {visible.map((m, i) => (
+                  <li key={i} className={`message message--${m.severity.toLowerCase()}`}>
+                    <span className={`badge badge--${m.severity.toLowerCase()}`}>{m.severity}</span>
+                    <div className="message__body">
+                      {(m.sheet || m.cell || m.row || m.field) && (
+                        <div className="message__location">
+                          {m.sheet && <span className="loc loc--sheet">{m.sheet}</span>}
+                          {m.cell && <span className="loc loc--cell">{m.cell}</span>}
+                          {!m.cell && m.row && <span className="loc loc--cell">row {m.row}</span>}
+                          {m.field && <span className="loc loc--field">{m.field}</span>}
+                        </div>
+                      )}
+                      <div className="message__text">{m.message}</div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function MetaItem({ label, value }) {
+  return (
+    <div className="meta-item">
+      <dt>{label}</dt>
+      <dd>{value}</dd>
     </div>
   );
 }
 
 function StatTile({ label, value, tone }) {
   return (
-    <div className={`stat-tile${tone ? ` stat-tile--${tone}` : ''}`}>
+    <div className={`stat-tile stat-tile--${tone}`}>
       <div className="stat-tile__value">{value}</div>
       <div className="stat-tile__label">{label}</div>
     </div>

@@ -1,15 +1,10 @@
-export default function ShellBar({ objectName, onBack }) {
+export default function ShellBar({ objectName }) {
   return (
     <header className="shell-bar">
       <div className="shell-bar__left">
-        {onBack && (
-          <button className="shell-bar__back" onClick={onBack} aria-label="Back to object list">
-            &#8592;
-          </button>
-        )}
         <span className="shell-bar__logo">SAP</span>
         <span className="shell-bar__divider" />
-        <span className="shell-bar__title">Data Migration Cockpit</span>
+        <span className="shell-bar__title">AI Migration Cockpit Agent</span>
         {objectName && (
           <>
             <span className="shell-bar__crumb-sep">/</span>
