@@ -1,0 +1,1916 @@
+{
+  "source": "https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/d3a3eb7caa1842858bf0372e17ad3909/8dd142b479f9481891fa8b3f86648df3.html",
+  "migrationApproach": "Staging Table",
+  "retrieved": "2026-08-01",
+  "objectCount": 228,
+  "edgeCount": 632,
+  "dependsOn": {
+    "Warehouse stock": [
+      "Batch unique at material and client level",
+      "MM - Purchasing info record with conditions",
+      "Product",
+      "Warehouse storage bin"
+    ],
+    "Warehouse fixed bin assignment": [
+      "Product",
+      "Warehouse storage bin"
+    ],
+    "Warehouse stock (deprecated)": [
+      "Batch unique at material and client level",
+      "MM - Purchasing info record with conditions",
+      "Product",
+      "Warehouse storage bin"
+    ],
+    "Warehouse storage bin": [],
+    "Warehouse storage bin sorting": [
+      "Warehouse storage bin"
+    ],
+    "AVC - Material variant": [
+      "AVC - Configuration profile (restricted)",
+      "Object classification - General template",
+      "Product"
+    ],
+    "CO - Internal order (restricted)": [
+      "CO - Cost center",
+      "CO - Profit center",
+      "Fixed asset - Master data",
+      "PS - Network",
+      "PS - WBS element",
+      "SD - Sales order (only open SO)"
+    ],
+    "CO - Profit center": [],
+    "PC - Confidential business information": [
+      "PC - Analytical composition",
+      "PC - Polymer composition",
+      "PC - Product compliance info",
+      "PC - Substance"
+    ],
+    "PC - Polymer composition": [
+      "PC - Substance"
+    ],
+    "FI - Historical balance": [
+      "CO - Cost center",
+      "CO - Profit center",
+      "FI - G/L account",
+      "JVA - Joint venture master data (deprecated)"
+    ],
+    "Customer - extend existing record by credit management data": [
+      "Customer"
+    ],
+    "FI - Bank account balance (deprecated)": [],
+    "JIT - Supply control": [
+      "JIT - Customer",
+      "Production version"
+    ],
+    "Legal document": [
+      "Document info record",
+      "Legal transaction"
+    ],
+    "MM - Model product specification": [
+      "Product"
+    ],
+    "PC - Product compliance info": [
+      "PC - Raw material compliance info",
+      "PC - Substance",
+      "Product"
+    ],
+    "PC - Raw material compliance info": [
+      "PC - Substance",
+      "Product",
+      "Supplier"
+    ],
+    "PMA - Customer compliance assessment": [
+      "Customer",
+      "PC - Product compliance info",
+      "Product"
+    ],
+    "QM - Quality info record": [
+      "Product",
+      "Supplier"
+    ],
+    "Revenue accounting contract": [
+      "CO - Cost center",
+      "CO - Profit center",
+      "Condition record for pricing (general template)",
+      "Customer",
+      "FI - G/L account",
+      "PS - WBS element",
+      "Product",
+      "Service order (only open SRVO)"
+    ],
+    "PC - Material-based composition": [
+      "PC - Polymer composition",
+      "PC - Product compliance info",
+      "PC - Raw material compliance info",
+      "PC - Substance"
+    ],
+    "Condition record for batch determination (for all areas)": [
+      "Characteristic",
+      "Class",
+      "Customer",
+      "Product"
+    ],
+    "PP - Process order (only open PO)": [
+      "CO - Profit center",
+      "Master recipe",
+      "Material BOM",
+      "PS - WBS element",
+      "Product",
+      "Production version",
+      "SD - Sales order (only open SO)"
+    ],
+    "Supplier - extend existing record by multiple addresses": [
+      "Supplier"
+    ],
+    "FI - G/L account balance and open/line item": [
+      "CO - Cost center",
+      "CO - Profit center",
+      "Exchange rate",
+      "FI - G/L account",
+      "Product",
+      "SD - Sales order (only open SO)"
+    ],
+    "Real estate - Usage enablement group": [
+      "CO - Cost center",
+      "Fixed asset (incl. balances and transactions)",
+      "PS - WBS element"
+    ],
+    "Real estate - Occupancy group": [
+      "CO - Cost center",
+      "PS - WBS element",
+      "Real estate - Usage enablement group"
+    ],
+    "PC - Analytical composition": [
+      "PC - Polymer composition",
+      "PC - Product compliance info",
+      "PC - Raw material compliance info",
+      "PC - Substance"
+    ],
+    "FI-CA - Direct debit mandate": [
+      "Bank"
+    ],
+    "Real estate contract": [
+      "CO - Cost center",
+      "CO - Profit center",
+      "Customer",
+      "PS - WBS element",
+      "Real estate - Occupancy group",
+      "Real estate - Usage enablement group",
+      "Supplier"
+    ],
+    "PM - Maintenance order": [
+      "CO - Cost center",
+      "CO - Internal order (restricted)",
+      "CO - Profit center",
+      "Customer",
+      "Document info record",
+      "FI - G/L account",
+      "Fixed asset (incl. balances and transactions)",
+      "PM - Equipment",
+      "PM - Functional location",
+      "PM - Maintenance notification",
+      "PP - Process order (only open PO)",
+      "PP - Production order (only open PO)",
+      "PS - WBS element",
+      "Product",
+      "Supplier",
+      "Work center/Resource"
+    ],
+    "EHS - Deviation incident": [
+      "EHS - Compliance requirement",
+      "EHS - Location"
+    ],
+    "EHS - Incident": [
+      "EHS - Location"
+    ],
+    "PRA - Ownership lease": [],
+    "PMA - Supplier information assessment": [
+      "PC - Product compliance info"
+    ],
+    "PRA - Contract volume": [
+      "PRA - Contract",
+      "PRA - DOI MP WC cross reference",
+      "PRA - Delivery network",
+      "PRA - MP-WC to contract cross reference",
+      "PRA - Marketing group assignment",
+      "PRA - Measurement point",
+      "PRA - Well and well completion",
+      "PRA - extend existing customer by PRA data",
+      "Product"
+    ],
+    "PRA - Marketing group assignment": [
+      "PRA - Division order interest",
+      "PRA - Joint venture",
+      "PRA - extend existing customer by PRA data",
+      "PRA - extend existing supplier by PRA data",
+      "Product"
+    ],
+    "RFM - Product assignment to distribution center": [
+      "Customer",
+      "Product"
+    ],
+    "RFM - Assortment module": [
+      "Customer",
+      "Product"
+    ],
+    "PRA - Delivery network allocation profile": [
+      "PRA - Delivery network",
+      "PRA - Delivery network downstream node",
+      "Product"
+    ],
+    "PRA - Well completion test": [
+      "PRA - Delivery network downstream node",
+      "PRA - Well and well completion"
+    ],
+    "PRA - Delivery network downstream node": [
+      "PRA - Delivery network",
+      "PRA - Measurement point",
+      "PRA - Well and well completion"
+    ],
+    "PRA - Measurement point volume": [
+      "PRA - Contract",
+      "PRA - Delivery network",
+      "PRA - Delivery network downstream node",
+      "PRA - MP/WC transporter cross reference",
+      "PRA - Measurement point",
+      "PRA - Measurement point allocation profile",
+      "PRA - extend existing customer by PRA data",
+      "Product"
+    ],
+    "PRA - Measurement point allocation profile": [
+      "PRA - Delivery network",
+      "PRA - Delivery network allocation profile",
+      "PRA - Delivery network downstream node",
+      "PRA - Measurement point",
+      "Product"
+    ],
+    "PRA - WC/DN theoretical calculation method": [
+      "PRA - Delivery network",
+      "PRA - Delivery network downstream node",
+      "PRA - Well and well completion"
+    ],
+    "Warranty claim": [
+      "PM - Equipment",
+      "PM - Functional location",
+      "Product",
+      "Supplier"
+    ],
+    "PMA - Simple compliance assessment": [
+      "PC - Product compliance info",
+      "PC - Raw material compliance info"
+    ],
+    "PP - Production order (only open PO)": [
+      "CO - Profit center",
+      "Material BOM",
+      "PS - WBS element",
+      "Product",
+      "Production version",
+      "Routing",
+      "SD - Sales order (only open SO)"
+    ],
+    "PP-KAB - Kanban control cycle": [
+      "CO - Cost center",
+      "MM - Purchase scheduling agreement",
+      "PP-KAB - Production supply area",
+      "Product",
+      "Production version",
+      "SD - Sales scheduling agreement",
+      "Supplier",
+      "Work center/Resource"
+    ],
+    "Field Logistics - Container (restricted)": [
+      "PM - Equipment",
+      "Product",
+      "Supplier"
+    ],
+    "Field logistics - Supplier item": [
+      "MM - Purchase order (only open PO)"
+    ],
+    "PC - Safety-related property": [
+      "PC - Product compliance info",
+      "PC - Raw material compliance info",
+      "PC - Substance"
+    ],
+    "SDS - Shipment history": [
+      "Customer",
+      "PC - Product compliance info"
+    ],
+    "SDS - Assessment for unpackaged product": [
+      "Document info record",
+      "PC - Product compliance info"
+    ],
+    "PP-KAB - Production supply area": [],
+    "Fixed asset - Postings": [
+      "Fixed asset - Master data"
+    ],
+    "Fixed asset - Usage object": [],
+    "Fixed asset - Master data": [
+      "CO - Activity type",
+      "CO - Cost center",
+      "CO - Profit center",
+      "Fixed asset - Usage object",
+      "Product",
+      "Supplier"
+    ],
+    "DG - Assessment for unpackaged product (content-based)": [
+      "DG - Technical names for substance",
+      "PC - Product compliance info"
+    ],
+    "DG - Assessment for packaged product": [
+      "DG - Assessment for unpackaged product (content-based)",
+      "DG - Assessment for unpackaged product (text-based)"
+    ],
+    "Change request and activity for SAP Management of Change": [],
+    "PM - Equipment": [
+      "Batch unique at material and client level",
+      "Batch unique at plant level",
+      "CO - Cost center",
+      "Fixed asset (incl. balances and transactions)",
+      "PM - Functional location",
+      "PS - WBS element",
+      "Work center/Resource"
+    ],
+    "PM - Functional location": [
+      "CO - Cost center",
+      "Fixed asset (incl. balances and transactions)",
+      "PS - WBS element",
+      "Work center/Resource"
+    ],
+    "MM - Purchase order (only open PO)": [
+      "CO - Cost center",
+      "CO - Profit center",
+      "FI - G/L account",
+      "Fixed asset (incl. balances and transactions)",
+      "MM - Purchase contract",
+      "MM - Purchasing info record with conditions",
+      "Material BOM",
+      "PS - WBS element",
+      "Product",
+      "SD - Sales order (only open SO)",
+      "Supplier"
+    ],
+    "EHS - Task": [
+      "EHS - Compliance requirement",
+      "EHS - Location"
+    ],
+    "Object classification - Inspection characteristic (QPMK)": [
+      "Characteristic",
+      "Class",
+      "QM - Master inspection characteristic"
+    ],
+    "Object classification - Selected set (QPAM)": [
+      "Characteristic",
+      "Class",
+      "QM - Selected set"
+    ],
+    "Object classification - Document (DRAW)": [
+      "Characteristic",
+      "Class",
+      "Document info record"
+    ],
+    "Object classification - Material (MARA)": [
+      "Characteristic",
+      "Class",
+      "Product"
+    ],
+    "Object classification - Code group (QPGR)": [
+      "Characteristic",
+      "Class",
+      "QM/PM - Catalog code group/code"
+    ],
+    "Object classification - Inspection method (QMTB)": [
+      "Characteristic",
+      "Class",
+      "QM - Inspection method"
+    ],
+    "RFM - Merchandise category reference article": [],
+    "RFM - Merchandise category characteristic value restriction": [
+      "Characteristic",
+      "RFM - Merchandise category",
+      "RFM - Merchandise category hierarchy node"
+    ],
+    "EHS - Data classifier": [],
+    "EHS - Location classifier": [],
+    "EHS - Chemical/Physical property": [],
+    "EHS - Compliance scenario": [
+      "EHS - Calculation definition",
+      "EHS - Chemical/Physical property",
+      "EHS - Compliance requirement",
+      "EHS - Data classifier",
+      "EHS - Data collection",
+      "EHS - Location",
+      "EHS - Location aggregation",
+      "EHS - Location classifier"
+    ],
+    "Customer - extend existing record by multiple addresses": [
+      "Customer"
+    ],
+    "Bank": [],
+    "Class": [
+      "Characteristic",
+      "Document info record"
+    ],
+    "SD - Sales order (only open SO)": [
+      "AVC - Configuration profile (restricted)",
+      "Characteristic",
+      "Class",
+      "Condition record for pricing (general template)",
+      "Condition record for pricing in sales (restricted)",
+      "Customer",
+      "Object classification - General template",
+      "Product"
+    ],
+    "Supplier - extend existing record by new org levels": [
+      "Customer",
+      "Supplier"
+    ],
+    "MM - Purchasing info record- extend existing record": [
+      "MM - Purchasing info record with conditions",
+      "Product",
+      "Supplier"
+    ],
+    "Product - extend existing record with long text": [
+      "Product"
+    ],
+    "Product - extend existing record by new org levels": [
+      "CO - Profit center",
+      "PP-KAB - Production supply area",
+      "Product"
+    ],
+    "Customer - extend existing record by new org levels": [
+      "Customer",
+      "Supplier"
+    ],
+    "DG - Technical names for substance": [
+      "PC - Substance"
+    ],
+    "LO - Handling unit": [
+      "Batch unique at material and client level",
+      "Material inventory balance",
+      "Product"
+    ],
+    "Service product": [
+      "CO - Profit center",
+      "Supplier"
+    ],
+    "PC - Physical-chemical property": [
+      "PC - Product compliance info",
+      "PC - Raw material compliance info",
+      "PC - Substance"
+    ],
+    "Object classification - Purchasing info record (EINA)": [
+      "Characteristic",
+      "Class",
+      "MM - Purchasing info record with conditions"
+    ],
+    "RFM - Merchandise category": [],
+    "RFM - Merchandise category hierarchy node": [
+      "Characteristic"
+    ],
+    "RFM - Merchandise category hierarchy node assignment": [],
+    "RFM - MCHN Characteristic value restriction": [],
+    "JIT - Communication group": [],
+    "JIT - Control cycle": [
+      "JIT - Communication group",
+      "JIT - Supply control",
+      "MM - Purchase scheduling agreement",
+      "Product"
+    ],
+    "SD - Condition Record for Material determination": [],
+    "Master recipe": [
+      "MM - Purchase scheduling agreement",
+      "MM - Purchasing info record with conditions",
+      "Material BOM",
+      "Product",
+      "Production version",
+      "Supplier",
+      "Work center/Resource"
+    ],
+    "EHS - Data collection": [
+      "EHS - Data classifier",
+      "EHS - Location"
+    ],
+    "EHS - Compliance requirement": [
+      "EHS - Chemical/Physical property",
+      "EHS - Location",
+      "EHS - Location classifier"
+    ],
+    "EHS - Calculation definition": [
+      "EHS - Compliance requirement",
+      "EHS - Data classifier",
+      "EHS - Data collection",
+      "EHS - Location",
+      "EHS - Location aggregation",
+      "EHS - Location classifier"
+    ],
+    "EHS - Location aggregation": [
+      "EHS - Data classifier",
+      "EHS - Location"
+    ],
+    "FI - SEPA mandate": [
+      "Bank",
+      "Customer"
+    ],
+    "ECM - Change master": [
+      "Document info record",
+      "Material BOM",
+      "Product"
+    ],
+    "PM - Measurement document": [
+      "PM - Measuring point"
+    ],
+    "QM - Inspection plan": [
+      "QM - Inspection method",
+      "QM - Master inspection characteristic",
+      "QM - Selected set",
+      "QM - Selected set code",
+      "QM/PM - Catalog code group/code"
+    ],
+    "Service order (only open SRVO)": [
+      "Condition record for pricing (general template)",
+      "Customer",
+      "PM - Equipment",
+      "PM - Functional location",
+      "Product"
+    ],
+    "JVA - Joint operating agreement": [
+      "JVA - Joint venture partner"
+    ],
+    "JVA - Joint venture partner": [],
+    "JVA - Cost center suspense": [
+      "JVA - Joint venture master data (deprecated)"
+    ],
+    "JVA - Venture suspense": [
+      "JVA - Joint venture master data (deprecated)"
+    ],
+    "JVA - Project suspense": [
+      "JVA - Joint venture master data (deprecated)"
+    ],
+    "JVA - Joint venture master data (deprecated)": [
+      "JVA - Joint operating agreement",
+      "JVA - Joint venture partner"
+    ],
+    "CO - Business process": [
+      "CO - Profit center"
+    ],
+    "FI - G/L account - extend existing record by new org levels": [
+      "FI - G/L account"
+    ],
+    "FI - G/L account": [],
+    "CO - Statistical key figure": [],
+    "Product": [
+      "CO - Profit center",
+      "PP-KAB - Production supply area",
+      "Supplier"
+    ],
+    "FI - Accounts payable open item": [
+      "CO - Profit center",
+      "Exchange rate",
+      "FI - G/L account",
+      "Supplier"
+    ],
+    "Material listing and exclusion": [],
+    "DG - Assessment for unpackaged product (text-based)": [
+      "PC - Product compliance info"
+    ],
+    "FI - Accounts receivable open item": [
+      "CO - Profit center",
+      "Customer",
+      "Exchange rate",
+      "FI - G/L account"
+    ],
+    "CO - Cost rate": [
+      "CO - Activity type",
+      "CO - Cost center"
+    ],
+    "CO - Activity type": [],
+    "FI - Cash memo record": [
+      "CO - Profit center"
+    ],
+    "Batch unique at material and client level": [
+      "Characteristic",
+      "Class",
+      "Object classification - General template",
+      "Product",
+      "Supplier"
+    ],
+    "Batch unique at plant level": [
+      "Characteristic",
+      "Class",
+      "Object classification - General template",
+      "Product",
+      "Supplier"
+    ],
+    "Material BOM": [
+      "Product"
+    ],
+    "PM - Equipment BOM": [
+      "PM - Equipment",
+      "Product"
+    ],
+    "PM - Functional location BOM": [
+      "PM - Functional location",
+      "Product"
+    ],
+    "Class hierarchy": [
+      "Class"
+    ],
+    "Characteristic": [
+      "Document info record",
+      "ECM - Change master",
+      "QM - Selected set",
+      "RFM - Merchandise category"
+    ],
+    "Object classification - General template": [
+      "Characteristic",
+      "Class",
+      "Customer",
+      "MM - Purchasing info record with conditions",
+      "PM - Equipment",
+      "PM - Functional location",
+      "PM - Maintenance plan",
+      "Product",
+      "QM - Inspection method",
+      "QM - Master inspection characteristic",
+      "QM - Selected set",
+      "QM/PM - Catalog code group/code",
+      "Supplier",
+      "Work center/Resource"
+    ],
+    "PC - Substance": [],
+    "Condition contract": [
+      "CO - Cost center",
+      "Condition record for pricing (general template)",
+      "Condition record for pricing in sales (restricted)",
+      "Customer",
+      "PS - WBS element",
+      "Product",
+      "Supplier"
+    ],
+    "Consent": [],
+    "CO - Cost center": [
+      "CO - Profit center",
+      "JVA - Joint venture master data (deprecated)"
+    ],
+    "Customer - extend existing record by Thailand branch code": [
+      "Customer"
+    ],
+    "Customer": [
+      "Bank"
+    ],
+    "SD - Customer Material": [
+      "Characteristic",
+      "Class",
+      "Customer",
+      "Product"
+    ],
+    "Document info record": [
+      "Product"
+    ],
+    "Exchange rate": [],
+    "Fixed asset (incl. balances and transactions)": [
+      "CO - Activity type",
+      "CO - Cost center",
+      "CO - Profit center",
+      "Product",
+      "Supplier"
+    ],
+    "QM/PM - Catalog code group/code": [],
+    "QM - Inspection method": [
+      "QM - Selected set",
+      "QM - Selected set code",
+      "QM/PM - Catalog code group/code"
+    ],
+    "EFD - Reinf report (Brazil)": [],
+    "QM - Selected set": [
+      "QM/PM - Catalog code group/code"
+    ],
+    "EHS - Location hierarchy": [
+      "EHS - Location"
+    ],
+    "JIT - Packing group specification": [
+      "JIT - Supply control"
+    ],
+    "EHS - Location": [
+      "EHS - Chemical/Physical property",
+      "EHS - Location classifier"
+    ],
+    "QM - Selected set code": [
+      "QM - Selected set",
+      "QM/PM - Catalog code group/code"
+    ],
+    "QM - Master inspection characteristic": [
+      "QM - Inspection method",
+      "QM - Selected set",
+      "QM - Selected set code",
+      "QM/PM - Catalog code group/code"
+    ],
+    "Legal transaction": [
+      "Customer",
+      "MM - Purchase contract",
+      "MM - Purchase order (only open PO)",
+      "Real estate contract",
+      "SD - Sales contract",
+      "SD - Sales order (only open SO)",
+      "Supplier"
+    ],
+    "PM - Maintenance item": [
+      "PM - Equipment",
+      "PM - Equipment task list",
+      "PM - Functional location",
+      "PM - Functional location task list",
+      "PM - General maintenance task list",
+      "Work center/Resource"
+    ],
+    "PM - Maintenance notification": [
+      "PM - Equipment",
+      "PM - Functional location",
+      "Product",
+      "QM/PM - Catalog code group/code",
+      "Work center/Resource"
+    ],
+    "PM - Maintenance plan": [
+      "PM - Equipment",
+      "PM - Equipment task list",
+      "PM - Functional location",
+      "PM - Functional location task list",
+      "PM - General maintenance task list",
+      "PM - Maintenance item",
+      "PM - Measurement document",
+      "PM - Measuring point",
+      "Work center/Resource"
+    ],
+    "PM - Equipment task list": [
+      "MM - Purchase contract",
+      "MM - Purchasing info record with conditions",
+      "PM - Equipment",
+      "PM - Functional location",
+      "Product"
+    ],
+    "PM - Functional location task list": [
+      "MM - Purchase contract",
+      "MM - Purchasing info record with conditions",
+      "PM - Equipment",
+      "PM - Functional location",
+      "Product"
+    ],
+    "PM - General maintenance task list": [
+      "MM - Purchase contract",
+      "MM - Purchasing info record with conditions",
+      "PM - Equipment",
+      "PM - Functional location",
+      "Product"
+    ],
+    "JIT - Customer": [
+      "Customer"
+    ],
+    "Material inventory balance": [
+      "Batch unique at material and client level",
+      "Fixed asset (incl. balances and transactions)",
+      "MM - Purchase order (only open PO)",
+      "MM - Purchasing info record with conditions",
+      "Product",
+      "SD - Sales order (only open SO)",
+      "Supplier"
+    ],
+    "PM - Measuring point": [
+      "Characteristic",
+      "PM - Equipment",
+      "PM - Functional location",
+      "QM/PM - Catalog code group/code"
+    ],
+    "Condition record for pricing (general template)": [],
+    "Condition record for pricing in purchasing (restricted)": [
+      "Product",
+      "Supplier"
+    ],
+    "Condition record for pricing in sales (restricted)": [
+      "Customer",
+      "Product"
+    ],
+    "SD - Condition record for free goods": [],
+    "Material - Forecast planning": [
+      "Product"
+    ],
+    "Product classification - Commodity code": [
+      "Product"
+    ],
+    "Product classification - Legal control": [
+      "Product"
+    ],
+    "Product consumption": [
+      "Product"
+    ],
+    "Production version": [
+      "Master recipe",
+      "Material BOM",
+      "PM - Equipment task list",
+      "PM - Functional location task list",
+      "PM - General maintenance task list",
+      "Product",
+      "Routing"
+    ],
+    "PS - Network": [
+      "CO - Profit center",
+      "PS - WBS element",
+      "SD - Sales order (only open SO)"
+    ],
+    "PS - Project": [
+      "CO - Profit center"
+    ],
+    "PS - WBS element": [
+      "CO - Profit center",
+      "PS - Project"
+    ],
+    "MM - Purchase contract": [
+      "CO - Cost center",
+      "CO - Profit center",
+      "FI - G/L account",
+      "Fixed asset (incl. balances and transactions)",
+      "MM - Purchasing info record with conditions",
+      "PS - Project",
+      "PS - WBS element",
+      "Product",
+      "SD - Sales order (only open SO)",
+      "Supplier"
+    ],
+    "MM - Purchase scheduling agreement": [
+      "CO - Cost center",
+      "CO - Profit center",
+      "FI - G/L account",
+      "Fixed asset - Master data",
+      "MM - Purchasing info record with conditions",
+      "PS - Project",
+      "PS - WBS element",
+      "Product",
+      "SD - Sales order (only open SO)",
+      "Supplier"
+    ],
+    "MM - Purchasing info record with conditions": [
+      "Product",
+      "Supplier"
+    ],
+    "SD - Sales scheduling agreement": [
+      "Condition record for pricing (general template)",
+      "Customer",
+      "Product"
+    ],
+    "Routing": [
+      "MM - Purchase scheduling agreement",
+      "MM - Purchasing info record with conditions",
+      "Material BOM",
+      "Product",
+      "Supplier",
+      "Work center/Resource"
+    ],
+    "SD - Sales contract": [
+      "Condition record for pricing (general template)",
+      "Customer",
+      "Product"
+    ],
+    "Software/Hardware constraint": [
+      "Product"
+    ],
+    "MM - Source list": [
+      "MM - Purchase contract",
+      "MM - Purchase scheduling agreement",
+      "Product",
+      "Supplier"
+    ],
+    "Supplier - extend existing record by Thailand branch code": [
+      "Supplier"
+    ],
+    "Supplier": [
+      "Bank"
+    ],
+    "AVC - Configuration profile (restricted)": [
+      "Object classification - General template",
+      "Product"
+    ],
+    "Work center/Resource": [
+      "CO - Cost center"
+    ],
+    "TRM - Commercial paper": [],
+    "TRM - Deposit at notice": [],
+    "TRM - FX option": [],
+    "TRM - Foreign exchange swap - contract": [],
+    "TRM - Foreign exchange collar - contract": [],
+    "TRM - Foreign exchange spot/forward transaction - contract": [],
+    "TRM - Interest rate instrument": [],
+    "TRM - Position value": [
+      "TRM - Commercial paper",
+      "TRM - Deposit at notice",
+      "TRM - FX option",
+      "TRM - Foreign exchange spot/forward transaction - contract",
+      "TRM - Foreign exchange swap - contract",
+      "TRM - Interest rate instrument"
+    ],
+    "AVC - Characteristics group": [
+      "AVC - Configuration profile (restricted)",
+      "Characteristic",
+      "Class",
+      "Object classification - General template",
+      "Product"
+    ],
+    "PRA - Allocation cross reference": [
+      "PRA - Contract",
+      "PRA - Well and well completion"
+    ],
+    "PRA - Chemical analysis data": [
+      "PRA - Well and well completion",
+      "PRA - extend existing supplier by PRA data"
+    ],
+    "PRA - MP-WC to contract cross reference": [
+      "PRA - Contract",
+      "PRA - MP/WC transporter cross reference",
+      "PRA - Well and well completion",
+      "PRA - extend existing customer by PRA data"
+    ],
+    "PRA - Remitter to DOI cross reference": [
+      "CO - Cost center",
+      "PRA - Check input process rule",
+      "PRA - Division order interest",
+      "PRA - extend existing customer by PRA data"
+    ],
+    "PRA - Check input process rule": [
+      "PRA - extend existing customer by PRA data"
+    ],
+    "PRA - Check input translation": [
+      "PRA - extend existing customer by PRA data"
+    ],
+    "PRA - Account entry control": [
+      "PRA - Contract",
+      "PRA - Division order interest",
+      "PRA - Joint venture",
+      "PRA - extend existing supplier by PRA data"
+    ],
+    "PRA - Journal entry open balance": [
+      "CO - Cost center",
+      "PRA - Contract",
+      "PRA - Division order interest",
+      "PRA - Joint venture",
+      "PRA - Well and well completion",
+      "PRA - extend existing customer by PRA data",
+      "PRA - extend existing supplier by PRA data"
+    ],
+    "PRA - extend existing customer by PRA data": [
+      "Customer"
+    ],
+    "PRA - Division order interest": [
+      "PRA - Joint venture",
+      "PRA - Ownership lease",
+      "PRA - extend existing customer by PRA data",
+      "PRA - extend existing supplier by PRA data"
+    ],
+    "PRA - DOI accounting": [
+      "CO - Cost center",
+      "PRA - Division order interest",
+      "PRA - Joint venture",
+      "PRA - extend existing customer by PRA data"
+    ],
+    "PRA - DOI MP WC cross reference": [
+      "PRA - Division order interest",
+      "PRA - Joint venture",
+      "PRA - Well and well completion",
+      "Product"
+    ],
+    "PRA - Joint venture": [
+      "JVA - Joint venture master data (deprecated)",
+      "PRA - extend existing customer by PRA data"
+    ],
+    "PRA - Unit venture tract": [
+      "PRA - Division order interest"
+    ],
+    "PRA - extend existing supplier by PRA data": [
+      "Supplier"
+    ],
+    "PRA - Well and well completion": [
+      "CO - Cost center",
+      "PRA - extend existing customer by PRA data",
+      "PS - WBS element"
+    ],
+    "PRA - MP/WC transporter cross reference": [
+      "PRA - Well and well completion",
+      "PRA - extend existing customer by PRA data"
+    ],
+    "PRA - Well completion volume": [
+      "PRA - MP/WC transporter cross reference",
+      "PRA - Well and well completion",
+      "PRA - extend existing customer by PRA data",
+      "Product"
+    ],
+    "PRA - Contract": [
+      "PRA - Division order interest",
+      "PRA - Joint venture",
+      "PRA - extend existing customer by PRA data",
+      "PRA - extend existing supplier by PRA data"
+    ],
+    "PRA - Valuation formula": [
+      "PRA - Contract",
+      "PRA - Division order interest",
+      "PRA - Joint venture",
+      "PRA - Unit venture tract",
+      "PRA - Well and well completion",
+      "PRA - extend existing customer by PRA data",
+      "Product"
+    ],
+    "PRA - Settlement diversity": [
+      "PRA - Contract",
+      "PRA - Division order interest",
+      "PRA - Joint venture",
+      "PRA - Valuation cross reference",
+      "PRA - Valuation formula",
+      "PRA - Well and well completion",
+      "PRA - extend existing supplier by PRA data"
+    ],
+    "PRA - Settlement statement DOI cross reference": [
+      "PRA - Contract",
+      "PRA - Division order interest",
+      "PRA - Joint venture",
+      "PRA - extend existing customer by PRA data",
+      "Product"
+    ],
+    "PRA - State tax rate": [],
+    "PRA - Tax calculation data": [],
+    "PRA - Valuation cross reference": [
+      "PRA - Contract",
+      "PRA - Division order interest",
+      "PRA - Joint venture",
+      "PRA - Unit venture tract",
+      "PRA - Valuation formula",
+      "PRA - Well and well completion"
+    ],
+    "PRA - Well completion tax classification": [
+      "PRA - Well and well completion"
+    ],
+    "PRA - Measurement point": [
+      "CO - Cost center"
+    ],
+    "PRA - Delivery network": [
+      "PRA - Joint venture"
+    ],
+    "HCM - Employee": [],
+    "HCM - Object": [],
+    "HCM - Relationship": []
+  },
+  "requiredBy": {
+    "Product": [
+      "AVC - Characteristics group",
+      "AVC - Configuration profile (restricted)",
+      "AVC - Material variant",
+      "Batch unique at material and client level",
+      "Batch unique at plant level",
+      "Condition contract",
+      "Condition record for batch determination (for all areas)",
+      "Condition record for pricing in purchasing (restricted)",
+      "Condition record for pricing in sales (restricted)",
+      "Document info record",
+      "ECM - Change master",
+      "FI - G/L account balance and open/line item",
+      "Field Logistics - Container (restricted)",
+      "Fixed asset (incl. balances and transactions)",
+      "Fixed asset - Master data",
+      "JIT - Control cycle",
+      "LO - Handling unit",
+      "MM - Model product specification",
+      "MM - Purchase contract",
+      "MM - Purchase order (only open PO)",
+      "MM - Purchase scheduling agreement",
+      "MM - Purchasing info record with conditions",
+      "MM - Purchasing info record- extend existing record",
+      "MM - Source list",
+      "Master recipe",
+      "Material - Forecast planning",
+      "Material BOM",
+      "Material inventory balance",
+      "Object classification - General template",
+      "Object classification - Material (MARA)",
+      "PC - Product compliance info",
+      "PC - Raw material compliance info",
+      "PM - Equipment BOM",
+      "PM - Equipment task list",
+      "PM - Functional location BOM",
+      "PM - Functional location task list",
+      "PM - General maintenance task list",
+      "PM - Maintenance notification",
+      "PM - Maintenance order",
+      "PMA - Customer compliance assessment",
+      "PP - Process order (only open PO)",
+      "PP - Production order (only open PO)",
+      "PP-KAB - Kanban control cycle",
+      "PRA - Contract volume",
+      "PRA - DOI MP WC cross reference",
+      "PRA - Delivery network allocation profile",
+      "PRA - Marketing group assignment",
+      "PRA - Measurement point allocation profile",
+      "PRA - Measurement point volume",
+      "PRA - Settlement statement DOI cross reference",
+      "PRA - Valuation formula",
+      "PRA - Well completion volume",
+      "Product - extend existing record by new org levels",
+      "Product - extend existing record with long text",
+      "Product classification - Commodity code",
+      "Product classification - Legal control",
+      "Product consumption",
+      "Production version",
+      "QM - Quality info record",
+      "RFM - Assortment module",
+      "RFM - Product assignment to distribution center",
+      "Revenue accounting contract",
+      "Routing",
+      "SD - Customer Material",
+      "SD - Sales contract",
+      "SD - Sales order (only open SO)",
+      "SD - Sales scheduling agreement",
+      "Service order (only open SRVO)",
+      "Software/Hardware constraint",
+      "Warehouse fixed bin assignment",
+      "Warehouse stock",
+      "Warehouse stock (deprecated)",
+      "Warranty claim"
+    ],
+    "Warehouse storage bin": [
+      "Warehouse fixed bin assignment",
+      "Warehouse stock",
+      "Warehouse stock (deprecated)",
+      "Warehouse storage bin sorting"
+    ],
+    "Batch unique at material and client level": [
+      "LO - Handling unit",
+      "Material inventory balance",
+      "PM - Equipment",
+      "Warehouse stock",
+      "Warehouse stock (deprecated)"
+    ],
+    "MM - Purchasing info record with conditions": [
+      "MM - Purchase contract",
+      "MM - Purchase order (only open PO)",
+      "MM - Purchase scheduling agreement",
+      "MM - Purchasing info record- extend existing record",
+      "Master recipe",
+      "Material inventory balance",
+      "Object classification - General template",
+      "Object classification - Purchasing info record (EINA)",
+      "PM - Equipment task list",
+      "PM - Functional location task list",
+      "PM - General maintenance task list",
+      "Routing",
+      "Warehouse stock",
+      "Warehouse stock (deprecated)"
+    ],
+    "Object classification - General template": [
+      "AVC - Characteristics group",
+      "AVC - Configuration profile (restricted)",
+      "AVC - Material variant",
+      "Batch unique at material and client level",
+      "Batch unique at plant level",
+      "SD - Sales order (only open SO)"
+    ],
+    "AVC - Configuration profile (restricted)": [
+      "AVC - Characteristics group",
+      "AVC - Material variant",
+      "SD - Sales order (only open SO)"
+    ],
+    "CO - Profit center": [
+      "CO - Business process",
+      "CO - Cost center",
+      "CO - Internal order (restricted)",
+      "FI - Accounts payable open item",
+      "FI - Accounts receivable open item",
+      "FI - Cash memo record",
+      "FI - G/L account balance and open/line item",
+      "FI - Historical balance",
+      "Fixed asset (incl. balances and transactions)",
+      "Fixed asset - Master data",
+      "MM - Purchase contract",
+      "MM - Purchase order (only open PO)",
+      "MM - Purchase scheduling agreement",
+      "PM - Maintenance order",
+      "PP - Process order (only open PO)",
+      "PP - Production order (only open PO)",
+      "PS - Network",
+      "PS - Project",
+      "PS - WBS element",
+      "Product",
+      "Product - extend existing record by new org levels",
+      "Real estate contract",
+      "Revenue accounting contract",
+      "Service product"
+    ],
+    "CO - Cost center": [
+      "CO - Cost rate",
+      "CO - Internal order (restricted)",
+      "Condition contract",
+      "FI - G/L account balance and open/line item",
+      "FI - Historical balance",
+      "Fixed asset (incl. balances and transactions)",
+      "Fixed asset - Master data",
+      "MM - Purchase contract",
+      "MM - Purchase order (only open PO)",
+      "MM - Purchase scheduling agreement",
+      "PM - Equipment",
+      "PM - Functional location",
+      "PM - Maintenance order",
+      "PP-KAB - Kanban control cycle",
+      "PRA - DOI accounting",
+      "PRA - Journal entry open balance",
+      "PRA - Measurement point",
+      "PRA - Remitter to DOI cross reference",
+      "PRA - Well and well completion",
+      "Real estate - Occupancy group",
+      "Real estate - Usage enablement group",
+      "Real estate contract",
+      "Revenue accounting contract",
+      "Work center/Resource"
+    ],
+    "SD - Sales order (only open SO)": [
+      "CO - Internal order (restricted)",
+      "FI - G/L account balance and open/line item",
+      "Legal transaction",
+      "MM - Purchase contract",
+      "MM - Purchase order (only open PO)",
+      "MM - Purchase scheduling agreement",
+      "Material inventory balance",
+      "PP - Process order (only open PO)",
+      "PP - Production order (only open PO)",
+      "PS - Network"
+    ],
+    "Fixed asset - Master data": [
+      "CO - Internal order (restricted)",
+      "Fixed asset - Postings",
+      "MM - Purchase scheduling agreement"
+    ],
+    "PS - WBS element": [
+      "CO - Internal order (restricted)",
+      "Condition contract",
+      "MM - Purchase contract",
+      "MM - Purchase order (only open PO)",
+      "MM - Purchase scheduling agreement",
+      "PM - Equipment",
+      "PM - Functional location",
+      "PM - Maintenance order",
+      "PP - Process order (only open PO)",
+      "PP - Production order (only open PO)",
+      "PRA - Well and well completion",
+      "PS - Network",
+      "Real estate - Occupancy group",
+      "Real estate - Usage enablement group",
+      "Real estate contract",
+      "Revenue accounting contract"
+    ],
+    "PS - Network": [
+      "CO - Internal order (restricted)"
+    ],
+    "PC - Substance": [
+      "DG - Technical names for substance",
+      "PC - Analytical composition",
+      "PC - Confidential business information",
+      "PC - Material-based composition",
+      "PC - Physical-chemical property",
+      "PC - Polymer composition",
+      "PC - Product compliance info",
+      "PC - Raw material compliance info",
+      "PC - Safety-related property"
+    ],
+    "PC - Product compliance info": [
+      "DG - Assessment for unpackaged product (content-based)",
+      "DG - Assessment for unpackaged product (text-based)",
+      "PC - Analytical composition",
+      "PC - Confidential business information",
+      "PC - Material-based composition",
+      "PC - Physical-chemical property",
+      "PC - Safety-related property",
+      "PMA - Customer compliance assessment",
+      "PMA - Simple compliance assessment",
+      "PMA - Supplier information assessment",
+      "SDS - Assessment for unpackaged product",
+      "SDS - Shipment history"
+    ],
+    "PC - Analytical composition": [
+      "PC - Confidential business information"
+    ],
+    "PC - Polymer composition": [
+      "PC - Analytical composition",
+      "PC - Confidential business information",
+      "PC - Material-based composition"
+    ],
+    "JVA - Joint venture master data (deprecated)": [
+      "CO - Cost center",
+      "FI - Historical balance",
+      "JVA - Cost center suspense",
+      "JVA - Project suspense",
+      "JVA - Venture suspense",
+      "PRA - Joint venture"
+    ],
+    "FI - G/L account": [
+      "FI - Accounts payable open item",
+      "FI - Accounts receivable open item",
+      "FI - G/L account - extend existing record by new org levels",
+      "FI - G/L account balance and open/line item",
+      "FI - Historical balance",
+      "MM - Purchase contract",
+      "MM - Purchase order (only open PO)",
+      "MM - Purchase scheduling agreement",
+      "PM - Maintenance order",
+      "Revenue accounting contract"
+    ],
+    "Customer": [
+      "Condition contract",
+      "Condition record for batch determination (for all areas)",
+      "Condition record for pricing in sales (restricted)",
+      "Customer - extend existing record by Thailand branch code",
+      "Customer - extend existing record by credit management data",
+      "Customer - extend existing record by multiple addresses",
+      "Customer - extend existing record by new org levels",
+      "FI - Accounts receivable open item",
+      "FI - SEPA mandate",
+      "JIT - Customer",
+      "Legal transaction",
+      "Object classification - General template",
+      "PM - Maintenance order",
+      "PMA - Customer compliance assessment",
+      "PRA - extend existing customer by PRA data",
+      "RFM - Assortment module",
+      "RFM - Product assignment to distribution center",
+      "Real estate contract",
+      "Revenue accounting contract",
+      "SD - Customer Material",
+      "SD - Sales contract",
+      "SD - Sales order (only open SO)",
+      "SD - Sales scheduling agreement",
+      "SDS - Shipment history",
+      "Service order (only open SRVO)",
+      "Supplier - extend existing record by new org levels"
+    ],
+    "JIT - Customer": [
+      "JIT - Supply control"
+    ],
+    "Production version": [
+      "JIT - Supply control",
+      "Master recipe",
+      "PP - Process order (only open PO)",
+      "PP - Production order (only open PO)",
+      "PP-KAB - Kanban control cycle"
+    ],
+    "Legal transaction": [
+      "Legal document"
+    ],
+    "Document info record": [
+      "Characteristic",
+      "Class",
+      "ECM - Change master",
+      "Legal document",
+      "Object classification - Document (DRAW)",
+      "PM - Maintenance order",
+      "SDS - Assessment for unpackaged product"
+    ],
+    "PC - Raw material compliance info": [
+      "PC - Analytical composition",
+      "PC - Material-based composition",
+      "PC - Physical-chemical property",
+      "PC - Product compliance info",
+      "PC - Safety-related property",
+      "PMA - Simple compliance assessment"
+    ],
+    "Supplier": [
+      "Batch unique at material and client level",
+      "Batch unique at plant level",
+      "Condition contract",
+      "Condition record for pricing in purchasing (restricted)",
+      "Customer - extend existing record by new org levels",
+      "FI - Accounts payable open item",
+      "Field Logistics - Container (restricted)",
+      "Fixed asset (incl. balances and transactions)",
+      "Fixed asset - Master data",
+      "Legal transaction",
+      "MM - Purchase contract",
+      "MM - Purchase order (only open PO)",
+      "MM - Purchase scheduling agreement",
+      "MM - Purchasing info record with conditions",
+      "MM - Purchasing info record- extend existing record",
+      "MM - Source list",
+      "Master recipe",
+      "Material inventory balance",
+      "Object classification - General template",
+      "PC - Raw material compliance info",
+      "PM - Maintenance order",
+      "PP-KAB - Kanban control cycle",
+      "PRA - extend existing supplier by PRA data",
+      "Product",
+      "QM - Quality info record",
+      "Real estate contract",
+      "Routing",
+      "Service product",
+      "Supplier - extend existing record by Thailand branch code",
+      "Supplier - extend existing record by multiple addresses",
+      "Supplier - extend existing record by new org levels",
+      "Warranty claim"
+    ],
+    "Service order (only open SRVO)": [
+      "Revenue accounting contract"
+    ],
+    "Condition record for pricing (general template)": [
+      "Condition contract",
+      "Revenue accounting contract",
+      "SD - Sales contract",
+      "SD - Sales order (only open SO)",
+      "SD - Sales scheduling agreement",
+      "Service order (only open SRVO)"
+    ],
+    "Characteristic": [
+      "AVC - Characteristics group",
+      "Batch unique at material and client level",
+      "Batch unique at plant level",
+      "Class",
+      "Condition record for batch determination (for all areas)",
+      "Object classification - Code group (QPGR)",
+      "Object classification - Document (DRAW)",
+      "Object classification - General template",
+      "Object classification - Inspection characteristic (QPMK)",
+      "Object classification - Inspection method (QMTB)",
+      "Object classification - Material (MARA)",
+      "Object classification - Purchasing info record (EINA)",
+      "Object classification - Selected set (QPAM)",
+      "PM - Measuring point",
+      "RFM - Merchandise category characteristic value restriction",
+      "RFM - Merchandise category hierarchy node",
+      "SD - Customer Material",
+      "SD - Sales order (only open SO)"
+    ],
+    "Class": [
+      "AVC - Characteristics group",
+      "Batch unique at material and client level",
+      "Batch unique at plant level",
+      "Class hierarchy",
+      "Condition record for batch determination (for all areas)",
+      "Object classification - Code group (QPGR)",
+      "Object classification - Document (DRAW)",
+      "Object classification - General template",
+      "Object classification - Inspection characteristic (QPMK)",
+      "Object classification - Inspection method (QMTB)",
+      "Object classification - Material (MARA)",
+      "Object classification - Purchasing info record (EINA)",
+      "Object classification - Selected set (QPAM)",
+      "SD - Customer Material",
+      "SD - Sales order (only open SO)"
+    ],
+    "Material BOM": [
+      "ECM - Change master",
+      "MM - Purchase order (only open PO)",
+      "Master recipe",
+      "PP - Process order (only open PO)",
+      "PP - Production order (only open PO)",
+      "Production version",
+      "Routing"
+    ],
+    "Master recipe": [
+      "PP - Process order (only open PO)",
+      "Production version"
+    ],
+    "Exchange rate": [
+      "FI - Accounts payable open item",
+      "FI - Accounts receivable open item",
+      "FI - G/L account balance and open/line item"
+    ],
+    "Fixed asset (incl. balances and transactions)": [
+      "MM - Purchase contract",
+      "MM - Purchase order (only open PO)",
+      "Material inventory balance",
+      "PM - Equipment",
+      "PM - Functional location",
+      "PM - Maintenance order",
+      "Real estate - Usage enablement group"
+    ],
+    "Real estate - Usage enablement group": [
+      "Real estate - Occupancy group",
+      "Real estate contract"
+    ],
+    "Bank": [
+      "Customer",
+      "FI - SEPA mandate",
+      "FI-CA - Direct debit mandate",
+      "Supplier"
+    ],
+    "Real estate - Occupancy group": [
+      "Real estate contract"
+    ],
+    "PM - Maintenance notification": [
+      "PM - Maintenance order"
+    ],
+    "PM - Equipment": [
+      "Field Logistics - Container (restricted)",
+      "Object classification - General template",
+      "PM - Equipment BOM",
+      "PM - Equipment task list",
+      "PM - Functional location task list",
+      "PM - General maintenance task list",
+      "PM - Maintenance item",
+      "PM - Maintenance notification",
+      "PM - Maintenance order",
+      "PM - Maintenance plan",
+      "PM - Measuring point",
+      "Service order (only open SRVO)",
+      "Warranty claim"
+    ],
+    "PM - Functional location": [
+      "Object classification - General template",
+      "PM - Equipment",
+      "PM - Equipment task list",
+      "PM - Functional location BOM",
+      "PM - Functional location task list",
+      "PM - General maintenance task list",
+      "PM - Maintenance item",
+      "PM - Maintenance notification",
+      "PM - Maintenance order",
+      "PM - Maintenance plan",
+      "PM - Measuring point",
+      "Service order (only open SRVO)",
+      "Warranty claim"
+    ],
+    "Work center/Resource": [
+      "Master recipe",
+      "Object classification - General template",
+      "PM - Equipment",
+      "PM - Functional location",
+      "PM - Maintenance item",
+      "PM - Maintenance notification",
+      "PM - Maintenance order",
+      "PM - Maintenance plan",
+      "PP-KAB - Kanban control cycle",
+      "Routing"
+    ],
+    "CO - Internal order (restricted)": [
+      "PM - Maintenance order"
+    ],
+    "PP - Process order (only open PO)": [
+      "PM - Maintenance order"
+    ],
+    "PP - Production order (only open PO)": [
+      "PM - Maintenance order"
+    ],
+    "EHS - Location": [
+      "EHS - Calculation definition",
+      "EHS - Compliance requirement",
+      "EHS - Compliance scenario",
+      "EHS - Data collection",
+      "EHS - Deviation incident",
+      "EHS - Incident",
+      "EHS - Location aggregation",
+      "EHS - Location hierarchy",
+      "EHS - Task"
+    ],
+    "EHS - Compliance requirement": [
+      "EHS - Calculation definition",
+      "EHS - Compliance scenario",
+      "EHS - Deviation incident",
+      "EHS - Task"
+    ],
+    "PRA - Delivery network": [
+      "PRA - Contract volume",
+      "PRA - Delivery network allocation profile",
+      "PRA - Delivery network downstream node",
+      "PRA - Measurement point allocation profile",
+      "PRA - Measurement point volume",
+      "PRA - WC/DN theoretical calculation method"
+    ],
+    "PRA - Measurement point": [
+      "PRA - Contract volume",
+      "PRA - Delivery network downstream node",
+      "PRA - Measurement point allocation profile",
+      "PRA - Measurement point volume"
+    ],
+    "PRA - Well and well completion": [
+      "PRA - Allocation cross reference",
+      "PRA - Chemical analysis data",
+      "PRA - Contract volume",
+      "PRA - DOI MP WC cross reference",
+      "PRA - Delivery network downstream node",
+      "PRA - Journal entry open balance",
+      "PRA - MP-WC to contract cross reference",
+      "PRA - MP/WC transporter cross reference",
+      "PRA - Settlement diversity",
+      "PRA - Valuation cross reference",
+      "PRA - Valuation formula",
+      "PRA - WC/DN theoretical calculation method",
+      "PRA - Well completion tax classification",
+      "PRA - Well completion test",
+      "PRA - Well completion volume"
+    ],
+    "PRA - extend existing customer by PRA data": [
+      "PRA - Check input process rule",
+      "PRA - Check input translation",
+      "PRA - Contract",
+      "PRA - Contract volume",
+      "PRA - DOI accounting",
+      "PRA - Division order interest",
+      "PRA - Joint venture",
+      "PRA - Journal entry open balance",
+      "PRA - MP-WC to contract cross reference",
+      "PRA - MP/WC transporter cross reference",
+      "PRA - Marketing group assignment",
+      "PRA - Measurement point volume",
+      "PRA - Remitter to DOI cross reference",
+      "PRA - Settlement statement DOI cross reference",
+      "PRA - Valuation formula",
+      "PRA - Well and well completion",
+      "PRA - Well completion volume"
+    ],
+    "PRA - DOI MP WC cross reference": [
+      "PRA - Contract volume"
+    ],
+    "PRA - MP-WC to contract cross reference": [
+      "PRA - Contract volume"
+    ],
+    "PRA - Marketing group assignment": [
+      "PRA - Contract volume"
+    ],
+    "PRA - Contract": [
+      "PRA - Account entry control",
+      "PRA - Allocation cross reference",
+      "PRA - Contract volume",
+      "PRA - Journal entry open balance",
+      "PRA - MP-WC to contract cross reference",
+      "PRA - Measurement point volume",
+      "PRA - Settlement diversity",
+      "PRA - Settlement statement DOI cross reference",
+      "PRA - Valuation cross reference",
+      "PRA - Valuation formula"
+    ],
+    "PRA - extend existing supplier by PRA data": [
+      "PRA - Account entry control",
+      "PRA - Chemical analysis data",
+      "PRA - Contract",
+      "PRA - Division order interest",
+      "PRA - Journal entry open balance",
+      "PRA - Marketing group assignment",
+      "PRA - Settlement diversity"
+    ],
+    "PRA - Division order interest": [
+      "PRA - Account entry control",
+      "PRA - Contract",
+      "PRA - DOI MP WC cross reference",
+      "PRA - DOI accounting",
+      "PRA - Journal entry open balance",
+      "PRA - Marketing group assignment",
+      "PRA - Remitter to DOI cross reference",
+      "PRA - Settlement diversity",
+      "PRA - Settlement statement DOI cross reference",
+      "PRA - Unit venture tract",
+      "PRA - Valuation cross reference",
+      "PRA - Valuation formula"
+    ],
+    "PRA - Joint venture": [
+      "PRA - Account entry control",
+      "PRA - Contract",
+      "PRA - DOI MP WC cross reference",
+      "PRA - DOI accounting",
+      "PRA - Delivery network",
+      "PRA - Division order interest",
+      "PRA - Journal entry open balance",
+      "PRA - Marketing group assignment",
+      "PRA - Settlement diversity",
+      "PRA - Settlement statement DOI cross reference",
+      "PRA - Valuation cross reference",
+      "PRA - Valuation formula"
+    ],
+    "PRA - Delivery network downstream node": [
+      "PRA - Delivery network allocation profile",
+      "PRA - Measurement point allocation profile",
+      "PRA - Measurement point volume",
+      "PRA - WC/DN theoretical calculation method",
+      "PRA - Well completion test"
+    ],
+    "PRA - MP/WC transporter cross reference": [
+      "PRA - MP-WC to contract cross reference",
+      "PRA - Measurement point volume",
+      "PRA - Well completion volume"
+    ],
+    "PRA - Measurement point allocation profile": [
+      "PRA - Measurement point volume"
+    ],
+    "PRA - Delivery network allocation profile": [
+      "PRA - Measurement point allocation profile"
+    ],
+    "Routing": [
+      "PP - Production order (only open PO)",
+      "Production version"
+    ],
+    "PP-KAB - Production supply area": [
+      "PP-KAB - Kanban control cycle",
+      "Product",
+      "Product - extend existing record by new org levels"
+    ],
+    "MM - Purchase scheduling agreement": [
+      "JIT - Control cycle",
+      "MM - Source list",
+      "Master recipe",
+      "PP-KAB - Kanban control cycle",
+      "Routing"
+    ],
+    "SD - Sales scheduling agreement": [
+      "PP-KAB - Kanban control cycle"
+    ],
+    "MM - Purchase order (only open PO)": [
+      "Field logistics - Supplier item",
+      "Legal transaction",
+      "Material inventory balance"
+    ],
+    "CO - Activity type": [
+      "CO - Cost rate",
+      "Fixed asset (incl. balances and transactions)",
+      "Fixed asset - Master data"
+    ],
+    "Fixed asset - Usage object": [
+      "Fixed asset - Master data"
+    ],
+    "DG - Technical names for substance": [
+      "DG - Assessment for unpackaged product (content-based)"
+    ],
+    "DG - Assessment for unpackaged product (text-based)": [
+      "DG - Assessment for packaged product"
+    ],
+    "DG - Assessment for unpackaged product (content-based)": [
+      "DG - Assessment for packaged product"
+    ],
+    "Batch unique at plant level": [
+      "PM - Equipment"
+    ],
+    "MM - Purchase contract": [
+      "Legal transaction",
+      "MM - Purchase order (only open PO)",
+      "MM - Source list",
+      "PM - Equipment task list",
+      "PM - Functional location task list",
+      "PM - General maintenance task list"
+    ],
+    "QM - Master inspection characteristic": [
+      "Object classification - General template",
+      "Object classification - Inspection characteristic (QPMK)",
+      "QM - Inspection plan"
+    ],
+    "QM - Selected set": [
+      "Characteristic",
+      "Object classification - General template",
+      "Object classification - Selected set (QPAM)",
+      "QM - Inspection method",
+      "QM - Inspection plan",
+      "QM - Master inspection characteristic",
+      "QM - Selected set code"
+    ],
+    "QM/PM - Catalog code group/code": [
+      "Object classification - Code group (QPGR)",
+      "Object classification - General template",
+      "PM - Maintenance notification",
+      "PM - Measuring point",
+      "QM - Inspection method",
+      "QM - Inspection plan",
+      "QM - Master inspection characteristic",
+      "QM - Selected set",
+      "QM - Selected set code"
+    ],
+    "QM - Inspection method": [
+      "Object classification - General template",
+      "Object classification - Inspection method (QMTB)",
+      "QM - Inspection plan",
+      "QM - Master inspection characteristic"
+    ],
+    "RFM - Merchandise category hierarchy node": [
+      "RFM - Merchandise category characteristic value restriction"
+    ],
+    "RFM - Merchandise category": [
+      "Characteristic",
+      "RFM - Merchandise category characteristic value restriction"
+    ],
+    "EHS - Location classifier": [
+      "EHS - Calculation definition",
+      "EHS - Compliance requirement",
+      "EHS - Compliance scenario",
+      "EHS - Location"
+    ],
+    "EHS - Chemical/Physical property": [
+      "EHS - Compliance requirement",
+      "EHS - Compliance scenario",
+      "EHS - Location"
+    ],
+    "EHS - Location aggregation": [
+      "EHS - Calculation definition",
+      "EHS - Compliance scenario"
+    ],
+    "EHS - Data collection": [
+      "EHS - Calculation definition",
+      "EHS - Compliance scenario"
+    ],
+    "EHS - Calculation definition": [
+      "EHS - Compliance scenario"
+    ],
+    "EHS - Data classifier": [
+      "EHS - Calculation definition",
+      "EHS - Compliance scenario",
+      "EHS - Data collection",
+      "EHS - Location aggregation"
+    ],
+    "Condition record for pricing in sales (restricted)": [
+      "Condition contract",
+      "SD - Sales order (only open SO)"
+    ],
+    "Material inventory balance": [
+      "LO - Handling unit"
+    ],
+    "JIT - Communication group": [
+      "JIT - Control cycle"
+    ],
+    "JIT - Supply control": [
+      "JIT - Control cycle",
+      "JIT - Packing group specification"
+    ],
+    "PM - Measuring point": [
+      "PM - Maintenance plan",
+      "PM - Measurement document"
+    ],
+    "QM - Selected set code": [
+      "QM - Inspection method",
+      "QM - Inspection plan",
+      "QM - Master inspection characteristic"
+    ],
+    "JVA - Joint venture partner": [
+      "JVA - Joint operating agreement",
+      "JVA - Joint venture master data (deprecated)"
+    ],
+    "JVA - Joint operating agreement": [
+      "JVA - Joint venture master data (deprecated)"
+    ],
+    "ECM - Change master": [
+      "Characteristic"
+    ],
+    "PM - Maintenance plan": [
+      "Object classification - General template"
+    ],
+    "Real estate contract": [
+      "Legal transaction"
+    ],
+    "SD - Sales contract": [
+      "Legal transaction"
+    ],
+    "PM - General maintenance task list": [
+      "PM - Maintenance item",
+      "PM - Maintenance plan",
+      "Production version"
+    ],
+    "PM - Equipment task list": [
+      "PM - Maintenance item",
+      "PM - Maintenance plan",
+      "Production version"
+    ],
+    "PM - Functional location task list": [
+      "PM - Maintenance item",
+      "PM - Maintenance plan",
+      "Production version"
+    ],
+    "PM - Maintenance item": [
+      "PM - Maintenance plan"
+    ],
+    "PM - Measurement document": [
+      "PM - Maintenance plan"
+    ],
+    "PS - Project": [
+      "MM - Purchase contract",
+      "MM - Purchase scheduling agreement",
+      "PS - WBS element"
+    ],
+    "TRM - Foreign exchange spot/forward transaction - contract": [
+      "TRM - Position value"
+    ],
+    "TRM - Foreign exchange swap - contract": [
+      "TRM - Position value"
+    ],
+    "TRM - Deposit at notice": [
+      "TRM - Position value"
+    ],
+    "TRM - Commercial paper": [
+      "TRM - Position value"
+    ],
+    "TRM - Interest rate instrument": [
+      "TRM - Position value"
+    ],
+    "TRM - FX option": [
+      "TRM - Position value"
+    ],
+    "PRA - Check input process rule": [
+      "PRA - Remitter to DOI cross reference"
+    ],
+    "PRA - Ownership lease": [
+      "PRA - Division order interest"
+    ],
+    "PRA - Unit venture tract": [
+      "PRA - Valuation cross reference",
+      "PRA - Valuation formula"
+    ],
+    "PRA - Valuation formula": [
+      "PRA - Settlement diversity",
+      "PRA - Valuation cross reference"
+    ],
+    "PRA - Valuation cross reference": [
+      "PRA - Settlement diversity"
+    ]
+  }
+}

@@ -1,5 +1,6 @@
 const { isBlank, asString, cellText, stripMandatorySuffix, FIELD_LIST_SHEET } = require('./templateParser');
 const catalog = require('./stagingObjectCatalog');
+const dependencies = require('./objectDependencies.json');
 
 const SEVERITY = { ERROR: 'Error', WARNING: 'Warning', INFO: 'Information', SUCCESS: 'Success' };
 
@@ -514,6 +515,199 @@ function checkValueMapping(template, report) {
   }
 }
 
+/* ---------- Failure impact: which dependent rows a failed record blocks ---------- */
+
+/**
+ * The cockpit creates the header record first, then its dependent records. If a
+ * header fails, every child row pointing at it is blocked even when that child
+ * row is itself error-free — this maps that cascade.
+ */
+function buildImpactGraph(template, report, mainSheetName, keyFieldName) {
+  const mainSheet = template.dataSheets.find((s) => s.name === mainSheetName);
+  if (!mainSheet || !keyFieldName) return null;
+
+  const keyColumn = mainSheet.columns.find((c) => c.name === keyFieldName);
+  if (!keyColumn) return null;
+
+  // Index every error message by the row it was raised against.
+  const errorsByRow = new Map();
+  for (const messages of Object.values(report.sections)) {
+    for (const m of messages) {
+      if (m.severity !== SEVERITY.ERROR || !m.sheet || !m.row) continue;
+      const id = `${m.sheet}:${m.row}`;
+      if (!errorsByRow.has(id)) errorsByRow.set(id, []);
+      errorsByRow.get(id).push(m.message);
+    }
+  }
+
+  const keyToMainRow = new Map();
+  for (const row of mainSheet.rows) {
+    const raw = row.values[keyColumn.index];
+    if (isBlank(raw)) continue;
+    const key = asString(raw);
+    if (!keyToMainRow.has(key)) keyToMainRow.set(key, row.rowNumber);
+  }
+
+  const failedKeys = new Map();
+  for (const [key, rowNumber] of keyToMainRow.entries()) {
+    const reasons = errorsByRow.get(`${mainSheetName}:${rowNumber}`);
+    if (reasons) failedKeys.set(key, { row: rowNumber, reasons });
+  }
+
+  const childSheets = template.dataSheets.filter(
+    (s) => s.name !== mainSheetName && s.rows.length > 0 && s.columns.some((c) => c.name === keyFieldName)
+  );
+
+  const blockedByKey = new Map();
+  const nodes = [];
+  const edges = [];
+
+  const mainOwnErrorRows = mainSheet.rows.filter((r) => errorsByRow.has(`${mainSheetName}:${r.rowNumber}`)).length;
+  nodes.push({
+    id: mainSheetName,
+    sheet: mainSheetName,
+    role: 'main',
+    totalRows: mainSheet.rows.length,
+    ownErrorRows: mainOwnErrorRows,
+    blockedRows: 0,
+    status: mainOwnErrorRows > 0 ? 'error' : mainSheet.rows.length > 0 ? 'clean' : 'empty',
+  });
+
+  for (const sheet of childSheets) {
+    const fkColumn = sheet.columns.find((c) => c.name === keyFieldName);
+    let ownErrorRows = 0;
+    let blockedRows = 0;
+
+    for (const row of sheet.rows) {
+      const hasOwnError = errorsByRow.has(`${sheet.name}:${row.rowNumber}`);
+      if (hasOwnError) ownErrorRows += 1;
+
+      const raw = row.values[fkColumn.index];
+      if (isBlank(raw)) continue;
+      const fk = asString(raw);
+
+      // Blocked = the parent header itself failed, so this row cannot load
+      // regardless of its own correctness.
+      if (failedKeys.has(fk)) {
+        blockedRows += 1;
+        if (!blockedByKey.has(fk)) blockedByKey.set(fk, []);
+        blockedByKey.get(fk).push({ sheet: sheet.name, row: row.rowNumber, hasOwnError });
+      }
+    }
+
+    nodes.push({
+      id: sheet.name,
+      sheet: sheet.name,
+      role: 'child',
+      totalRows: sheet.rows.length,
+      ownErrorRows,
+      blockedRows,
+      status: blockedRows > 0 ? 'blocked' : ownErrorRows > 0 ? 'error' : 'clean',
+    });
+
+    edges.push({ from: mainSheetName, to: sheet.name, viaField: keyFieldName });
+  }
+
+  const cascades = [...failedKeys.entries()].map(([key, info]) => ({
+    key,
+    mainRow: info.row,
+    reasons: info.reasons,
+    blocked: blockedByKey.get(key) || [],
+  })).sort((a, b) => b.blocked.length - a.blocked.length);
+
+  return {
+    mainSheet: mainSheetName,
+    keyField: keyFieldName,
+    nodes,
+    edges,
+    cascades,
+    totals: {
+      failedRecords: failedKeys.size,
+      blockedRows: [...blockedByKey.values()].reduce((sum, list) => sum + list.length, 0),
+      affectedSheets: nodes.filter((n) => n.status === 'blocked').length,
+    },
+  };
+}
+
+/* ---------- Downstream migration objects blocked by this object failing ---------- */
+
+/**
+ * Each object's documentation lists the objects that must already be migrated.
+ * Inverted, that tells us which objects cannot load if this one fails — and the
+ * block propagates transitively down the chain.
+ */
+function buildDownstreamImpact(objectEntry, hasErrors) {
+  if (!objectEntry) return null;
+
+  const rootName = objectEntry.name;
+  if (!(rootName in dependencies.dependsOn)) return null;
+
+  const direct = dependencies.requiredBy[rootName] || [];
+
+  // Breadth-first over requiredBy gives the full set of objects that transitively
+  // depend on this one, recording the depth at which each becomes blocked.
+  const depthByObject = new Map();
+  let frontier = [rootName];
+  let depth = 0;
+
+  while (frontier.length > 0) {
+    depth += 1;
+    const next = [];
+    for (const current of frontier) {
+      for (const dependent of dependencies.requiredBy[current] || []) {
+        if (dependent === rootName || depthByObject.has(dependent)) continue;
+        depthByObject.set(dependent, depth);
+        next.push(dependent);
+      }
+    }
+    frontier = next;
+  }
+
+  const transitive = [...depthByObject.entries()]
+    .map(([name, level]) => ({ name, level }))
+    .sort((a, b) => a.level - b.level || a.name.localeCompare(b.name));
+
+  return {
+    object: rootName,
+    blocked: hasErrors,
+    dependsOn: dependencies.dependsOn[rootName] || [],
+    directDependents: direct,
+    transitiveDependents: transitive,
+    totals: {
+      direct: direct.length,
+      transitive: transitive.length,
+      maxDepth: transitive.reduce((max, t) => Math.max(max, t.level), 0),
+    },
+    source: dependencies.source,
+    retrieved: dependencies.retrieved,
+  };
+}
+
+function reportDownstreamImpact(downstream, report) {
+  if (!downstream) return;
+  const section = 'downstream';
+
+  if (downstream.dependsOn.length > 0) {
+    report.add(section, SEVERITY.INFO,
+      `'${downstream.object}' requires these objects to be maintained or migrated first: ${downstream.dependsOn.join(', ')}.`);
+  }
+
+  if (downstream.totals.direct === 0) {
+    report.add(section, SEVERITY.SUCCESS, `No other migration object lists '${downstream.object}' as a prerequisite.`);
+    return;
+  }
+
+  if (downstream.blocked) {
+    report.add(section, SEVERITY.ERROR,
+      `'${downstream.object}' has blocking errors, so ${downstream.totals.direct} migration object(s) that list it as a prerequisite cannot be migrated${downstream.totals.transitive > downstream.totals.direct ? `, and ${downstream.totals.transitive} in total once the chain is followed` : ''}. Fix this object before loading: ${downstream.directDependents.slice(0, 8).join(', ')}${downstream.directDependents.length > 8 ? `, and ${downstream.directDependents.length - 8} more` : ''}.`);
+  } else {
+    report.add(section, SEVERITY.SUCCESS,
+      `'${downstream.object}' has no blocking errors, so the ${downstream.totals.direct} object(s) that depend on it are not blocked by this template.`);
+    report.add(section, SEVERITY.INFO,
+      `${downstream.totals.direct} object(s) list '${downstream.object}' as a prerequisite and must be migrated after it${downstream.totals.transitive > downstream.totals.direct ? ` (${downstream.totals.transitive} including indirect dependents)` : ''}.`);
+  }
+}
+
 /* ---------- Layer 5: check tables (requires a live SAP connection) ---------- */
 
 function checkConfigTables(template, report) {
@@ -546,12 +740,24 @@ function validateTemplate(template, fileSize) {
     }
   }
 
+  const impactGraph = keyInfo
+    ? buildImpactGraph(template, report, keyInfo.mainSheetName, keyInfo.keyFieldName)
+    : null;
+
+  // Downstream objects are blocked by any error that would stop this template
+  // loading, not only by referential ones.
+  const hasBlockingErrors = report.counts().errors > 0;
+  const downstream = buildDownstreamImpact(objectEntry, hasBlockingErrors);
+  reportDownstreamImpact(downstream, report);
+
   const counts = report.counts();
 
   return {
     fileName: template.fileName,
     objectName: template.fieldList ? template.fieldList.objectName : null,
     migrationObject: objectEntry,
+    impactGraph,
+    downstream,
     format: template.format === 'xml2003' ? 'XML Spreadsheet 2003' : 'Excel Workbook (.xlsx)',
     fieldListDetected: Boolean(template.fieldList),
     mainSheet: keyInfo ? keyInfo.mainSheetName : (template.mainSheet ? template.mainSheet.name : null),

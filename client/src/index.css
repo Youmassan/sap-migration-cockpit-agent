@@ -21,6 +21,11 @@
 
   --sap-font: '72', '72full', 'Segoe UI', Arial, Helvetica, sans-serif;
 
+  --diagram-error-bg: #ffebeb;
+  --diagram-blocked-bg: #fef6f1;
+  --diagram-clean-bg: #f1fdf6;
+  --diagram-empty-bg: #f2f2f2;
+
   font: 14px/1.4 var(--sap-font);
   color: var(--sap-text);
   background: var(--sap-page-bg);
@@ -36,6 +41,11 @@
     --sap-text: #e8e9ea;
     --sap-text-muted: #a9adb0;
     --sap-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.4);
+
+    --diagram-error-bg: #3d2226;
+    --diagram-blocked-bg: #3a2c22;
+    --diagram-clean-bg: #1e3328;
+    --diagram-empty-bg: #2f353c;
     color-scheme: dark;
   }
 }

@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import ImpactDiagram from './ImpactDiagram';
 
 const SECTIONS = [
   { key: 'prerequisites', title: 'Prerequisites', hint: 'File format, size, and template requirements' },
@@ -6,6 +7,7 @@ const SECTIONS = [
   { key: 'structure', title: 'Structure Integrity', hint: 'Layer 1 — sheets, columns, hidden technical rows' },
   { key: 'mandatory', title: 'Mandatory Coverage', hint: 'Layer 2 — active rows must fill all mandatory fields' },
   { key: 'referential', title: 'Foreign Key / Referential Integrity', hint: 'Layer 2b — child rows must point at a real header' },
+  { key: 'downstream', title: 'Dependent Migration Objects', hint: 'Objects that list this one as a prerequisite' },
   { key: 'types', title: 'Data Type & Length', hint: 'Layer 3 — conformance with the declared type and length' },
   { key: 'mapping', title: 'Value Mapping (Convert Values)', hint: 'Layer 4 — source values needing target mapping' },
   { key: 'checkTables', title: 'Check Tables / Configuration (Simulate)', hint: 'Layer 5 — requires a connected SAP system' },
@@ -68,6 +70,8 @@ export default function ValidationReport({ report }) {
           </div>
         )}
       </div>
+
+      <ImpactDiagram graph={report.impactGraph} downstream={report.downstream} />
 
       <div className="filter-bar">
         {['all', 'Error', 'Warning', 'Information'].map((sev) => (
