@@ -227,6 +227,30 @@ fixture('12-referential-duplicate-pk', "Basic Data row 10's Product Number set e
   setCellText(getCell(row10, 1), key9);
 });
 
+// 12b. Referential — duplicate record on a child sheet. Row 9 of 'Additional
+//      Descriptions' is copied, so both rows agree on every mandatory field
+//      (Product Number, Language Key, Product Description).
+fixture('12b-duplicate-child-record', "'Additional Descriptions' row 9 duplicated exactly", (doc) => {
+  const ad = findSheet(doc, 'Additional Descriptions');
+  const source = getRow(ad, 9);
+  const copy = clone(source);
+  delete copy['@_ss:Index'];
+  ad.Table.Row = [...asArray(ad.Table.Row), copy];
+});
+
+// 12c. Referential — child rows that share the foreign key but differ elsewhere
+//      must NOT be reported: one product legitimately has many descriptions.
+fixture('12c-child-same-fk-not-duplicate', "'Additional Descriptions' row reusing an existing Product Number with a different Language Key", (doc) => {
+  const ad = findSheet(doc, 'Additional Descriptions');
+  const existingKey = getCell(getRow(ad, 9), 1).Data['#text'];
+  const row = makeRow(13, [
+    makeCell(1, existingKey),
+    makeCell(2, 'DE'),
+    makeCell(3, 'German description'),
+  ]);
+  ad.Table.Row = [...asArray(ad.Table.Row), row];
+});
+
 // 13. Type — text exceeds declared length (Description, Text/40).
 fixture('13-type-text-overflow', "Basic Data row 9 'Description' set to 60 characters (declared max 40)", (doc) => {
   const bd = findSheet(doc, 'Basic Data');

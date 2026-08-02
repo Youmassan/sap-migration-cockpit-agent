@@ -284,6 +284,48 @@ function checkMandatoryCoverage(template, report) {
 
 /* ---------- Layer 2b: foreign key / referential integrity ---------- */
 
+/**
+ * Duplicate detection on the child sheets. The main sheet declares a real primary
+ * key (the Field List marks it group 'Key'), but on a child sheet that marker only
+ * tags the foreign key back to the header — the rest of the composite key is not
+ * declared anywhere in the template. The sheet's mandatory fields are used as the
+ * comparison key instead: that is a superset of the true key, so a match is always
+ * a genuine duplicate, while two rows differing only in a mandatory *data* field
+ * can slip through. Deliberately biased towards missing a duplicate rather than
+ * accusing a clean file.
+ */
+function checkDuplicateRecords(template, report, mainSheetName) {
+  const section = 'referential';
+
+  for (const sheet of template.dataSheets) {
+    if (sheet.name === mainSheetName || sheet.rows.length === 0) continue;
+
+    const keyColumns = sheet.columns.filter((c) => c.mandatory && c.name);
+    // A lone column is normally just the foreign key, where repeats are legitimate.
+    if (keyColumns.length < 2) continue;
+
+    const seen = new Map();
+    for (const row of sheet.rows) {
+      const parts = keyColumns.map((c) => asString(row.values[c.index]));
+      // Incomplete rows are the mandatory layer's business, not this one's.
+      if (parts.some((p) => p === '')) continue;
+      // NUL separator: key values legitimately contain spaces and punctuation
+      // (e.g. '1000 MILES12'), so a printable delimiter risks false collisions.
+      const composite = parts.join(' ');
+      if (!seen.has(composite)) seen.set(composite, { parts, rows: [] });
+      seen.get(composite).rows.push(row.rowNumber);
+    }
+
+    for (const { parts, rows } of seen.values()) {
+      if (rows.length < 2) continue;
+      const shown = parts.map((value, i) => `${keyColumns[i].name}='${value}'`).join(', ');
+      report.add(section, SEVERITY.ERROR,
+        `Duplicate record in sheet '${sheet.name}' on rows ${rows.join(', ')}: ${shown}. These rows agree on every mandatory field, so the cockpit cannot tell them apart.`,
+        { sheet: sheet.name, row: rows[0], field: keyColumns[0].name });
+    }
+  }
+}
+
 function checkReferentialIntegrity(template, report) {
   const section = 'referential';
   const mainSheet = template.mainSheet;
@@ -344,6 +386,8 @@ function checkReferentialIntegrity(template, report) {
       }
     }
   }
+
+  checkDuplicateRecords(template, report, mainSheet.name);
 
   for (const key of keyValues.keys()) {
     if (!referencedKeys.has(key)) {
