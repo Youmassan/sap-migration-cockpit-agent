@@ -420,12 +420,16 @@ function checkReferentialIntegrity(template, report) {
     }
   }
 
-  for (const key of keyValues.keys()) {
-    if (!referencedKeys.has(key)) {
-      report.add(section, SEVERITY.INFO,
-        `Record '${key}' in main sheet '${mainSheet.name}' has no child records in any other sheet. This is allowed.`,
-        { sheet: mainSheet.name, field: keyColumn.name });
-    }
+  // Reported as one overview line rather than per record: having no child rows is
+  // allowed, and on a large template this was emitting thousands of messages that
+  // buried the findings that actually need attention.
+  const childless = [...keyValues.keys()].filter((key) => !referencedKeys.has(key));
+  if (childless.length > 0) {
+    const sample = childless.slice(0, 5).map((k) => `'${k}'`).join(', ');
+    const rest = childless.length > 5 ? `, and ${childless.length - 5} more` : '';
+    report.add(section, SEVERITY.INFO,
+      `${childless.length} of ${keyValues.size} record(s) in main sheet '${mainSheet.name}' have no child rows in any other sheet, which is allowed. For example: ${sample}${rest}.`,
+      { sheet: mainSheet.name, field: keyColumn.name });
   }
 
   if (report.get(section).filter((m) => m.severity === SEVERITY.ERROR).length === 0) {

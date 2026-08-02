@@ -94,6 +94,12 @@ export default function ValidationReport({ report }) {
 
         const status = errorCount > 0 ? 'fail' : warnCount > 0 ? 'warn' : 'pass';
 
+        // Errors and warnings are what the user has to act on, so they always show.
+        // Information is context: kept behind a disclosure so a section reads as an
+        // overview instead of a wall of per-record notes.
+        const actionable = visible.filter((m) => m.severity !== 'Information');
+        const informational = visible.filter((m) => m.severity === 'Information');
+
         return (
           <div className="panel" key={key}>
             <div className="section-head">
@@ -106,32 +112,53 @@ export default function ValidationReport({ report }) {
               </span>
             </div>
 
-            {visible.length === 0 ? (
+            {visible.length === 0 && (
               <p className="state-message">No messages match the current filter.</p>
-            ) : (
+            )}
+
+            {actionable.length > 0 && (
               <ul className="message-list">
-                {visible.map((m, i) => (
-                  <li key={i} className={`message message--${m.severity.toLowerCase()}`}>
-                    <span className={`badge badge--${m.severity.toLowerCase()}`}>{m.severity}</span>
-                    <div className="message__body">
-                      {(m.sheet || m.cell || m.row || m.field) && (
-                        <div className="message__location">
-                          {m.sheet && <span className="loc loc--sheet">{m.sheet}</span>}
-                          {m.cell && <span className="loc loc--cell">{m.cell}</span>}
-                          {!m.cell && m.row && <span className="loc loc--cell">row {m.row}</span>}
-                          {m.field && <span className="loc loc--field">{m.field}</span>}
-                        </div>
-                      )}
-                      <div className="message__text">{m.message}</div>
-                    </div>
-                  </li>
-                ))}
+                {actionable.map((m, i) => <MessageRow key={i} m={m} />)}
               </ul>
+            )}
+
+            {informational.length > 0 && (
+              // Where information is all a section has (e.g. check tables, which
+              // simply cannot run without SAP), collapsing it would leave the
+              // section looking empty — so show it unless there is a lot of it.
+              <details className="info-details" open={actionable.length === 0 && informational.length <= 2}>
+                <summary>
+                  {informational.length} information message{informational.length === 1 ? '' : 's'}
+                </summary>
+                <ul className="message-list">
+                  {informational.map((m, i) => <MessageRow key={i} m={m} />)}
+                </ul>
+              </details>
             )}
           </div>
         );
       })}
     </div>
+  );
+}
+
+function MessageRow({ m }) {
+  const hasLocation = m.sheet || m.cell || m.row || m.field;
+  return (
+    <li className={`message message--${m.severity.toLowerCase()}`}>
+      <span className={`badge badge--${m.severity.toLowerCase()}`}>{m.severity}</span>
+      <div className="message__body">
+        {hasLocation && (
+          <div className="message__location">
+            {m.sheet && <span className="loc loc--sheet">{m.sheet}</span>}
+            {m.cell && <span className="loc loc--cell">{m.cell}</span>}
+            {!m.cell && m.row && <span className="loc loc--cell">row {m.row}</span>}
+            {m.field && <span className="loc loc--field">{m.field}</span>}
+          </div>
+        )}
+        <div className="message__text">{m.message}</div>
+      </div>
+    </li>
   );
 }
 
