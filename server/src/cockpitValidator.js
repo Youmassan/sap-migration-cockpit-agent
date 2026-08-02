@@ -282,49 +282,90 @@ function checkMandatoryCoverage(template, report) {
   }
 }
 
-/* ---------- Layer 2b: foreign key / referential integrity ---------- */
+/* ---------- Layer 2c: key uniqueness across every sheet ---------- */
 
 /**
- * Duplicate detection on the child sheets. The main sheet declares a real primary
- * key (the Field List marks it group 'Key'), but on a child sheet that marker only
- * tags the foreign key back to the header — the rest of the composite key is not
- * declared anywhere in the template. The sheet's mandatory fields are used as the
- * comparison key instead: that is a superset of the true key, so a match is always
- * a genuine duplicate, while two rows differing only in a mandatory *data* field
- * can slip through. Deliberately biased towards missing a duplicate rather than
- * accusing a clean file.
+ * Identifies the columns that make an active record unique on a given sheet.
+ *
+ * The main sheet declares a genuine primary key: the Field List marks it group
+ * 'Key', and that column must be unique on its own. On a child sheet the same
+ * marker only tags the foreign key back to the header, and the rest of the
+ * composite key is not declared anywhere in the template — so the sheet's
+ * mandatory fields stand in for it. That set is a superset of the true key, which
+ * biases the check towards silence: a reported duplicate is always real, while two
+ * rows differing only in a mandatory *data* field go unreported. Better to miss one
+ * than to accuse a clean template.
  */
-function checkDuplicateRecords(template, report, mainSheetName) {
-  const section = 'referential';
+function identityColumnsFor(sheet, isMainSheet) {
+  if (isMainSheet) {
+    const declared = sheet.columns.filter(
+      (c) => c.name && String(c.group || '').trim().toLowerCase() === 'key'
+    );
+    if (declared.length > 0) return { columns: declared, basis: 'declared key' };
+
+    const firstMandatory = sheet.columns.find((c) => c.mandatory && c.name);
+    return firstMandatory ? { columns: [firstMandatory], basis: 'first mandatory field' } : { columns: [], basis: null };
+  }
+
+  const mandatory = sheet.columns.filter((c) => c.mandatory && c.name);
+  // A lone mandatory column on a child sheet is just the foreign key, and one
+  // header legitimately owns many child rows, so repeats there mean nothing.
+  if (mandatory.length < 2) return { columns: [], basis: null };
+  return { columns: mandatory, basis: 'mandatory fields' };
+}
+
+function checkKeyUniqueness(template, report) {
+  const section = 'keyUniqueness';
+  const mainSheetName = template.mainSheet ? template.mainSheet.name : null;
+  let sheetsChecked = 0;
 
   for (const sheet of template.dataSheets) {
-    if (sheet.name === mainSheetName || sheet.rows.length === 0) continue;
+    if (sheet.rows.length === 0) continue;
 
-    const keyColumns = sheet.columns.filter((c) => c.mandatory && c.name);
-    // A lone column is normally just the foreign key, where repeats are legitimate.
-    if (keyColumns.length < 2) continue;
+    const { columns, basis } = identityColumnsFor(sheet, sheet.name === mainSheetName);
+    if (columns.length === 0) {
+      report.add(section, SEVERITY.INFO,
+        `Sheet '${sheet.name}' has no column combination that identifies a record, so duplicates cannot be detected here.`,
+        { sheet: sheet.name });
+      continue;
+    }
 
+    sheetsChecked += 1;
     const seen = new Map();
+
     for (const row of sheet.rows) {
-      const parts = keyColumns.map((c) => asString(row.values[c.index]));
-      // Incomplete rows are the mandatory layer's business, not this one's.
-      if (parts.some((p) => p === '')) continue;
+      const parts = columns.map((c) => asString(row.values[c.index]));
+      // A record missing part of its own key is the mandatory layer's business.
+      if (parts.some((part) => part === '')) continue;
       // NUL separator: key values legitimately contain spaces and punctuation
       // (e.g. '1000 MILES12'), so a printable delimiter risks false collisions.
-      const composite = parts.join(' ');
+      const composite = parts.join('\u0000');
       if (!seen.has(composite)) seen.set(composite, { parts, rows: [] });
       seen.get(composite).rows.push(row.rowNumber);
     }
 
     for (const { parts, rows } of seen.values()) {
       if (rows.length < 2) continue;
-      const shown = parts.map((value, i) => `${keyColumns[i].name}='${value}'`).join(', ');
+      const shown = columns.map((c, i) => `${c.name}='${parts[i]}'`).join(', ');
+      const label = columns.length === 1 ? 'Duplicate key' : 'Duplicate composite key';
       report.add(section, SEVERITY.ERROR,
-        `Duplicate record in sheet '${sheet.name}' on rows ${rows.join(', ')}: ${shown}. These rows agree on every mandatory field, so the cockpit cannot tell them apart.`,
-        { sheet: sheet.name, row: rows[0], field: keyColumns[0].name });
+        `${label} in sheet '${sheet.name}' on rows ${rows.join(', ')}: ${shown}. Every active record must be uniquely identified (compared on ${basis}), so the cockpit cannot tell these rows apart.`,
+        { sheet: sheet.name, row: rows[0], field: columns[0].name });
     }
   }
+
+  if (report.get(section).some((m) => m.severity === SEVERITY.ERROR)) return;
+
+  if (sheetsChecked === 0) {
+    report.add(section, SEVERITY.INFO, 'No sheet contained data whose records could be checked for uniqueness.');
+  } else {
+    report.add(section, SEVERITY.SUCCESS,
+      `Every active record is uniquely identified across ${sheetsChecked} populated sheet(s).`);
+  }
 }
+
+
+/* ---------- Layer 2b: foreign key / referential integrity ---------- */
 
 function checkReferentialIntegrity(template, report) {
   const section = 'referential';
@@ -348,14 +389,6 @@ function checkReferentialIntegrity(template, report) {
     const key = asString(raw);
     if (!keyValues.has(key)) keyValues.set(key, []);
     keyValues.get(key).push(row.rowNumber);
-  }
-
-  for (const [key, rows] of keyValues.entries()) {
-    if (rows.length > 1) {
-      report.add(section, SEVERITY.ERROR,
-        `Duplicate primary key '${key}' in main sheet '${mainSheet.name}' (rows ${rows.join(', ')}). The key must be unique per record.`,
-        { sheet: mainSheet.name, field: keyColumn.name, row: rows[0] });
-    }
   }
 
   const referencedKeys = new Set();
@@ -386,8 +419,6 @@ function checkReferentialIntegrity(template, report) {
       }
     }
   }
-
-  checkDuplicateRecords(template, report, mainSheet.name);
 
   for (const key of keyValues.keys()) {
     if (!referencedKeys.has(key)) {
@@ -772,12 +803,13 @@ function validateTemplate(template, fileSize) {
   let keyInfo = null;
   if (!structureBlocked) {
     checkMandatoryCoverage(template, report);
+    checkKeyUniqueness(template, report);
     keyInfo = checkReferentialIntegrity(template, report);
     checkTypesAndLengths(template, report);
     checkValueMapping(template, report);
     checkConfigTables(template, report);
   } else {
-    for (const section of ['mandatory', 'referential', 'types', 'mapping', 'checkTables']) {
+    for (const section of ['mandatory', 'keyUniqueness', 'referential', 'types', 'mapping', 'checkTables']) {
       report.add(section, SEVERITY.INFO,
         'Skipped: the template structure is corrupt, so the cockpit would reject the file before reaching this step. Fix the structure errors first.');
     }

@@ -18,7 +18,7 @@ const { validateTemplate } = require('../src/cockpitValidator');
 
 const OTHER_SECTIONS = [
   'prerequisites', 'migrationObject', 'structure', 'mandatory',
-  'referential', 'types', 'mapping', 'checkTables',
+  'keyUniqueness', 'referential', 'types', 'mapping', 'checkTables',
 ];
 
 /** Stable identity for a finding, so baseline noise can be subtracted. */
@@ -93,10 +93,10 @@ const EXPECTATIONS = {
     assertAdded(added, 'referential', 'Error', /Foreign key 'Product Number' is missing on active row/);
   },
   '12-referential-duplicate-pk.xml': (report, added) => {
-    assertAdded(added, 'referential', 'Error', /Duplicate primary key/);
+    assertAdded(added, 'keyUniqueness', 'Error', /Duplicate key in sheet 'Basic Data'/);
   },
   '12b-duplicate-child-record.xml': (report, added) => {
-    assertAdded(added, 'referential', 'Error', /Duplicate record in sheet 'Additional Descriptions'/);
+    assertAdded(added, 'keyUniqueness', 'Error', /Duplicate composite key in sheet 'Additional Descriptions'/);
   },
   // Negative case: sharing a foreign key is normal and must not be reported. Asserted
   // as "added nothing" rather than "zero errors", so it holds even if the source file
@@ -177,8 +177,10 @@ const EXPECTATIONS_TOUCH = {
   // A blank Product Number on an active child row is legitimately both a missing
   // mandatory field and an unresolvable foreign key, so both layers must fire.
   '11-referential-missing-fk.xml': new Set(['referential', 'mandatory']),
-  '12-referential-duplicate-pk.xml': new Set(['referential']),
-  '12b-duplicate-child-record.xml': new Set(['referential']),
+  // A repeated main-sheet key also orphans the child rows that pointed at the
+  // row it collided with, so referential integrity legitimately fires too.
+  '12-referential-duplicate-pk.xml': new Set(['keyUniqueness', 'referential']),
+  '12b-duplicate-child-record.xml': new Set(['keyUniqueness']),
   '12c-child-same-fk-not-duplicate.xml': new Set(OTHER_SECTIONS),
   '13-type-text-overflow.xml': new Set(['types']),
   '14-type-decimal-overflow.xml': new Set(['types']),
