@@ -152,15 +152,14 @@ function checkStructure(template, report) {
     }
   }
 
-  const commonOrder = actualNames.filter((n) => rosterNames.includes(n));
-  const expectedOrder = rosterNames.filter((n) => actualNames.includes(n));
-  if (commonOrder.join('|') !== expectedOrder.join('|')) {
-    report.add(section, SEVERITY.ERROR,
-      `Sheet order differs from the Field List roster (found: ${commonOrder.join(', ')}). Reordering sheets corrupts the template.`);
-  }
+  // Sheet tab position is not checked: the cockpit reads sheets by name, not by their
+  // left-to-right order in the workbook, so a reordered tab is not a structural problem.
 
   for (const sheet of template.dataSheets) {
     const roster = template.fieldList.sheets.find((s) => s.name === sheet.name);
+
+    // Optional and empty: nothing to load from this sheet, so skip its structure checks too.
+    if (sheet.rows.length === 0 && !(roster && roster.mandatory)) continue;
 
     if (!sheet.hiddenRowsIntact.structure) {
       report.add(section, SEVERITY.ERROR, `Hidden row 4 (SAP technical structure) is missing or empty on sheet '${sheet.name}'. The template XML is corrupt.`, { sheet: sheet.name });

@@ -110,8 +110,10 @@ function parseFieldList(worksheet) {
     const sheetLabel = asString(row.getCell(FL_COL.sheet).value);
     const fieldName = asString(row.getCell(FL_COL.field).value);
 
-    // A sheet banner row repeats the label across every column and has no distinct field entry.
-    const isBanner = sheetLabel && sheetLabel === fieldName;
+    // A sheet banner row has no field entry: real Excel exports leave the merged-across
+    // columns sparse (fieldName blank), while a hand-built XML may duplicate the label
+    // into every column instead (fieldName === sheetLabel). Either shape is a banner.
+    const isBanner = Boolean(sheetLabel) && (!fieldName || fieldName === sheetLabel);
 
     if (isBanner) {
       current = {
@@ -260,7 +262,16 @@ async function loadWorkbook(buffer, originalName) {
   const isXmlSpreadsheet = /\.xml$/i.test(originalName || '');
 
   if (isXmlSpreadsheet) {
-    const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '@_', parseTagValue: false, trimValues: false });
+    // htmlEntities decodes the numeric references Excel writes (&#10; for the newlines
+    // that separate a row-8 header's field name from its description block).
+    const parser = new XMLParser({
+      ignoreAttributes: false,
+      attributeNamePrefix: '@_',
+      parseTagValue: false,
+      trimValues: false,
+      processEntities: true,
+      htmlEntities: true,
+    });
     const doc = parser.parse(buffer.toString('utf-8'));
     const workbookNode = doc.Workbook;
     if (!workbookNode) throw new Error('Not a valid XML Spreadsheet 2003 file (missing <Workbook> root).');
